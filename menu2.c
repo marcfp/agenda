@@ -4,6 +4,7 @@
 #include <libpq-fe.h>
 #include <locale.h>
 #include <wchar.h>
+#include <stdlib.h>
 
 #define DEBUG 1 //0 no debug, 1 debug
 
@@ -89,16 +90,91 @@ while(valor==0 ){
 	valor=valida_data(data);
 	}
 }
+int char_int_ascii(char numero)
+{
+	switch(numero)
+	{
+		case 48: return 0; break;
+		case 49: return 1; break;
+		case 50: return 2; break;
+		case 51: return 3; break;
+		case 52: return 4; break;
+		case 53: return 5; break;
+		case 54: return 6; break;
+		case 55: return 7; break; 
+		case 56: return 8; break;
+		case 57: return 9; break;
+	}
+}
 int valida_data(wchar_t *data)
 {
 	int longitud=wcslen(data);
 	int i;
 	int bolea=1;
-	//int deb=1; //deb = 0 no debug, deb = 1 debug
+		//int deb=1; //deb = 0 no debug, deb = 1 debug
+	if(DEBUG)printf(" data = %ls \n, longitud = %d\n", data, longitud);	
+/*
+To convert an int to a string:
 
-	for (i=0;i<longitud;i++){ 
-	if (DEBUG) printf("\nposicio %d = caracter %c",i,data[i]);
-		if((data[i]<'0' || data[i]>'9' ) && bolea==1) {
+int x = -5;
+char buffer[50];
+sprintf( buffer, "%d", x );
+*/
+		int mileni = char_int_ascii(data[0])*1000;
+//9 = 57 ascii
+//0 = 48 ascii
+		int centena = char_int_ascii(data[1])*100;
+		int decena = char_int_ascii(data[2])*10;
+		int unitat = char_int_ascii(data[3])*1;
+//switch valor=char_int_ascii(valor);
+
+		int any = unitat+decena+centena+mileni;
+		int mes = char_int_ascii(data[5])*10 + char_int_ascii(data[6]);
+		int dia =char_int_ascii(data[8])*10+ char_int_ascii(data[9]);
+		int traspas=0; //0 no traspas, 1, traspas
+		printf("\n\nany llegit = %d, mes llegit = %d, dia llegit = %d", any, mes, dia);
+		
+		if((any %4 ==0) && (any % 100 != 0) || (any % 400 == 0)) {
+				traspas=1;
+				if(DEBUG)printf("es de traspas");
+				}
+		else {
+			traspas=0;
+			if(DEBUG)printf("NO HO ÉS");
+			}
+		
+		//És de traspàs cada any múltiple de 4, excepte el múltiples de 100, que no ho són, i excepte els múltiples de 400, que sí que ho són.
+		printf("mes = %d", mes);
+		if(mes==2 && traspas==1 && (dia<=29 && dia >=1)){
+			printf("any de traspas correcte, el febrer té 29 dies.. ho deixo passar");
+			bolea=1;
+		}
+		else{
+			if((mes==1 || mes ==3 || mes==5 || mes == 7 || mes ==8 || mes==10 || mes ==12)&& (dia<1 || dia>31)){
+				printf("\n\n\n31 dies introduits erronis\n\n\n");
+				bolea=0;
+			}
+			else if((mes==4 || mes==6 || mes ==9 || mes == 11)&&(dia<1 || dia >30)){
+				printf("\n\n\n30 dies introduits erronis\n\n\n");
+				bolea=0;
+				}
+				else if((mes==2) && (dia<1 || dia>28)){
+					printf("\n\n\n mes de febrer mal introduit\n\n\n");
+					bolea =0;
+					}
+					else if(traspas==1 && longitud==10){
+						printf("\n\n\nany correcte, no modul i tot ok\n\n\n");
+						bolea=1;
+						}
+						else{
+							printf("\n\n\nREPASSA LA DATA, hi ha coses INCORRECTES!!!HA DE SER AIXI : AAAA-MM-DD\n\n\n");
+							bolea=0;
+						}
+		}
+
+		/*for (i=0;i<longitud;i++){ 
+		if (DEBUG) printf("\nposicio %d = caracter %c",i,data[i]);
+			if((data[i]<'0' || data[i]>'9' ) && bolea==1) {
 				if(i!=4 && i!=7){ 
 						printf("\nAl lloc %d s'ha entrat %c i no és vàlid!!.\n\t Torna a entrar la data, gràcies\n",i,data[i]);
 						bolea=0;
@@ -109,12 +185,34 @@ int valida_data(wchar_t *data)
 							bolea=0;
 							}
 				}
-		}
-		else if (i==9 && bolea==1){
-			if (DEBUG)printf("\tdata correcte \t\tuououououo!!");
-//			bolea=1;
+				if((data[5]=='1' && (data[6]=='0' || data[6]=='1' || data[6]=='2'))|| (data[5]=='0' && (data[6]>'0' && data[6]<='9'))){
+					if(DEBUG)printf("Mes correcte ?");
+				}
+				else{
+					printf("N'estàs segur d'aquesta data? em sembla que és incorrecte");
+					bolea=0;
+				}
+				if((data[8]=='3' && data[9]=='0' || data[9]=='1') || ((data[8]=='2' || data[8]=='1') &&(data[9]>='0' && data[9]<='9')) ){
+					if(DEBUG) printf("més correcte ?");
+					//calcular any de traspàs.
+					//printf("any mileni = %d, centena = %d, decena = %d, unitat = %d",mileni,centena,decena,unitat);	
+					//mirar numero dies de cada mes.
+								}
+				else{
+					printf("N'estàs segur d'aquesta data? em sembla que és incorrecte ...");
+					bolea=0;
+				}
+				//int any=mileni+centena+decena+unitat;
+			//	printf("\nAny entrat = %d",mileni+centena+decena+unitat);
+				//if(data[8]=='2' && data[5]=='0' && data[6]=='2'		
 			}
-	}
+			else if (i==9 && bolea==1){
+				if (DEBUG)printf("\tdata correcte \t\tuououououo!!");
+//				bolea=1;
+				}
+		}*/
+//	}
+//	else bolea=0;
 	return bolea;
 	
 }
@@ -489,8 +587,8 @@ void menui(char tria)//menu d'inserció 1
                                 NULL,//Opciones adicionales
                                 NULL, // Fichero o terminal de la salida
                                 "agenda",//Nombre de la base de datos
-                                "marc", // Nombre de usuario
-                                "clases"); // PASSWORD del usuario
+                                "postgres", // Nombre de usuario
+                                "Datsxku1!"); // PASSWORD del usuario
         if (PQstatus(conexion) == CONNECTION_BAD) {
                 printf("\n Error en la conexió a la base de dades de l'agenda ! ");
 //                return 1;
@@ -509,7 +607,9 @@ void menui(char tria)//menu d'inserció 1
 	
 //if (deb==1)	printf("sentecia = %s nextval('id_seq'), '%s', '%s', '%s', '%c');",INSERTN, data, lloc, motiu, caducitat);
 	if(tria=='n') {
-			sprintf(buffer,"%s nextval('id_seq'),\'%s\',\'%s\',\'%s\',\'%c\');",INSERTN,data,lloc,motiu,caducitat); //construcció de l'insert
+			if(DEBUG)printf("sentenci = %s nextval('id_seq'), '%ls', '%ls', '%ls', '%ls');", INSERTN, data, lloc, motiu, caducitat);
+
+			sprintf(buffer,"%s nextval('id_seq'),\'%ls\',\'%ls\',\'%ls\',\'%ls\');",INSERTN,data,lloc,motiu,caducitat); //construcció de l'insert
 			if (DEBUG)	printf("Buffer = %s",buffer);
 		      }
 	else  if(tria=='t'){ 
@@ -615,8 +715,8 @@ if (tria=='n')	printf("\n\t\t\tELIMINACIÓ DE CITES EN L'AGENDA");
                                 NULL,//Opciones adicionales
                                 NULL, // Fichero o terminal de la salida
                                 "agenda",//Nombre de la base de datos
-                                "marc", // Nombre de usuario
-                                "clases"); // PASSWORD del usuario
+                                "postgres", // Nombre de usuario
+                                "Datsxku1!"); // PASSWORD del usuario
         if (PQstatus(conexion) == CONNECTION_BAD) {
                 printf("\n Error en la conexió a la base de dades de l'agenda ! ");
 //                return 1;
@@ -747,8 +847,8 @@ int menuc(char tria) //menu de consulta 2
                                 NULL,//Opciones adicionales
                                 NULL, // Fichero o terminal de la salida
                                 "agenda",//Nombre de la base de datos
-                                "marc", // Nombre de usuario
-                                "clases"); // PASSWORD del usuario
+                                "postgres", // Nombre de usuario
+                                "Datsxku1!"); // PASSWORD del usuario
         if (PQstatus(conexion) == CONNECTION_BAD) {
                 printf("\n Error en la conexió a la base de dades de l'agenda ! ");
         }
