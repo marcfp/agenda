@@ -5,6 +5,8 @@
 #include <locale.h>
 #include <wchar.h>
 #include <stdlib.h>
+#include <math.h>
+
 
 #define DEBUG 1 //0 no debug, 1 debug
 
@@ -15,15 +17,17 @@
 #define MAXTELEFON 11//telefon de 9 digits + intro
 #define MAXLLETRES 60	//noms maxims de 60 lletres
 #define INSERTN "INSERT INTO notes VALUES( "
-#define DELETEN "DELETE FROM notes where id="
+//DELETE FROM films USING producers
+//  WHERE producer_id = producers.id AND producers.name = 'foo';
+#define DELETEN "DELETE FROM notes WHERE id="//"DELETE FROM notes where id="
 #define SELECTN "SELECT * FROM notes"
 #define SELECTT "SELECT * FROM telefons"
 #define INSERTT "INSERT INTO telefons VALUES ( "
-#define DELETET "DELETE FROM telefons where id="
+#define DELETET "DELETE FROM telefons WHERE id_telefons="
 void mostra_telefon(wchar_t *cadena)
 {
 	int longitud,i;
-	printf("entro a mostra_telefon");
+	if(DEBUG)printf("entro a mostra_telefon");
 	longitud=wcslen(cadena);
 	for (i=0;i<longitud;i++) printf("%c",cadena[i]);
 }
@@ -40,7 +44,7 @@ void escapa_cometes (wchar_t *cadena)
 		int i;
 		longitud=wcslen(cadena);
 		for (i=0;i<longitud;i++){
-			 printf("posicio %d -> lletra %c \n",i,cadena[i]);
+			 if(DEBUG)printf("posicio %d -> lletra %c \n",i,cadena[i]);
 			 if(cadena[i]=='\'') cadena[i]='^' ;
 		}
 
@@ -50,7 +54,7 @@ int valida_caducitat(wchar_t *caducitat)
 	int longitud;
 	int i;
 	longitud=wcslen(caducitat);
-	printf("\n caducitat = %ls\n, longitud=%d\n",caducitat,longitud);
+	if(DEBUG)printf("\n caducitat = %ls\n, longitud=%d\n",caducitat,longitud);
 	for (i=0;i<longitud;i++){
 		if(caducitat[i]=='s'){
 			if(DEBUG) printf("\ns minuscula\n");
@@ -140,16 +144,16 @@ int valida_data(wchar_t *data)
 	//És de traspàs cada any múltiple de 4, excepte el múltiples de 100, que no ho són, i excepte els múltiples de 400, que sí que ho són.
 	printf("mes = %d", mes);
 	if(mes==2 && traspas==1 && (dia<=29 && dia >=1)){
-			printf("any de traspas correcte, el febrer té 29 dies.. ho deixo passar");
+			if(DEBUG)printf("any de traspas correcte, el febrer té 29 dies.. ho deixo passar");
 			bolea=1;
 		}
 	else{
 		if((mes==1 || mes ==3 || mes==5 || mes == 7 || mes ==8 || mes==10 || mes ==12)&& (dia<1 || dia>31)){
-				printf("\n\n\n31 dies introduits erronis\n\n\n");
+				if(DEBUG)printf("\n\n\n31 dies introduits erronis\n\n\n");
 				bolea=0;
 			}
 			else if((mes==4 || mes==6 || mes ==9 || mes == 11)&&(dia<1 || dia >30)){
-				printf("\n\n\n30 dies introduits erronis\n\n\n");
+				if(DEBUG)printf("\n\n\n30 dies introduits erronis\n\n\n");
 				bolea=0;
 				}
 				else if((mes==2) && (dia<1 || dia>28)){
@@ -157,7 +161,7 @@ int valida_data(wchar_t *data)
 					bolea =0;
 					}
 					else if(traspas==1 && longitud==10){
-						printf("\n\n\nany correcte, no modul i tot ok\n\n\n");
+						if(DEBUG)printf("\n\n\nany correcte, no modul i tot ok\n\n\n");
 						bolea=1;
 						}
 						else{
@@ -166,47 +170,6 @@ int valida_data(wchar_t *data)
 						}
 	}
 
-		/*for (i=0;i<longitud;i++){ 
-		if (DEBUG) printf("\nposicio %d = caracter %c",i,data[i]);
-			if((data[i]<'0' || data[i]>'9' ) && bolea==1) {
-				if(i!=4 && i!=7){ 
-						printf("\nAl lloc %d s'ha entrat %c i no és vàlid!!.\n\t Torna a entrar la data, gràcies\n",i,data[i]);
-						bolea=0;
-				}
-				else {
-					if(data[i]!='-' ){
-						 printf("\nLa separació posada no és CORRECTA, s'ha de posar \"-\".\nTorna a entrar la data, gràcies\n");
-							bolea=0;
-							}
-				}
-				if((data[5]=='1' && (data[6]=='0' || data[6]=='1' || data[6]=='2'))|| (data[5]=='0' && (data[6]>'0' && data[6]<='9'))){
-					if(DEBUG)printf("Mes correcte ?");
-				}
-				else{
-					printf("N'estàs segur d'aquesta data? em sembla que és incorrecte");
-					bolea=0;
-				}
-				if((data[8]=='3' && data[9]=='0' || data[9]=='1') || ((data[8]=='2' || data[8]=='1') &&(data[9]>='0' && data[9]<='9')) ){
-					if(DEBUG) printf("més correcte ?");
-					//calcular any de traspàs.
-					//printf("any mileni = %d, centena = %d, decena = %d, unitat = %d",mileni,centena,decena,unitat);	
-					//mirar numero dies de cada mes.
-								}
-				else{
-					printf("N'estàs segur d'aquesta data? em sembla que és incorrecte ...");
-					bolea=0;
-				}
-				//int any=mileni+centena+decena+unitat;
-			//	printf("\nAny entrat = %d",mileni+centena+decena+unitat);
-				//if(data[8]=='2' && data[5]=='0' && data[6]=='2'		
-			}
-			else if (i==9 && bolea==1){
-				if (DEBUG)printf("\tdata correcte \t\tuououououo!!");
-//				bolea=1;
-				}
-		}*/
-//	}
-//	else bolea=0;
 	return bolea;
 	
 }
@@ -266,7 +229,7 @@ int valida_correu(wchar_t *camp)
 			//printf("\n\n strncmp = %d \n\n",strncmp(camp,arroba,0));
 			//recorrer tot l'array buscant l'arroba
 			for (i=0; i<(s-camp-1);i++){
-				printf("\ncamp[i]=%c i = %d", camp[i],i);
+				if(DEBUG)printf("\ncamp[i]=%c i = %d", camp[i],i);
 				if(camp[i]=='@') {
 					existeix=1; 
 					if(DEBUG)printf("existeix = %d", existeix);
@@ -396,11 +359,11 @@ if (DEBUG) printf("Nom entrat = %ls", nom);
 //		printf("bolea  = %d",i);
 	}while(i!=0);
 	treu_intro(cognom1);
-if  (DEBUG) printf("CogNom1 entrat = %ls", cognom1);
+if  (DEBUG) printf("Cognom1 entrat = %ls", cognom1);
 
 	i=1;
 	do{
-		printf("\n Entra el segon cognom de %ls\t: ",nom);
+		printf("\n Entra el segon cognom de %ls %ls\t: ",nom,cognom1);
 		fflush(stdin);
 		fgetws(cognom2,MAXLLETRES,stdin);
 		i=valida_text(cognom2);
@@ -410,62 +373,62 @@ if  (DEBUG) printf("CogNom1 entrat = %ls", cognom1);
 if (DEBUG) printf("cognom2 entrat = %ls",cognom2);
 	i=1;
 	do{
-		printf("\n Entra la direcció de correu de %ls %ls\t",nom,cognom1);
+		printf("\n Entra la direcció de correu de %ls %ls %ls\t",nom,cognom1,cognom2);
 		fgetws(correu,MAXLLETRES,stdin);
 		i=valida_correu(correu);
 		if(DEBUG)printf("valor; i direccio correu %d",i);
 		if(i==1)
 			{ 
 			i=0;
-			printf("trenco bucle?");
+			if(DEBUG)printf("trenco bucle?");
 			}
 	}while (i!=0);
 	treu_intro(correu);
-if (DEBUG) printf("correu entrat = %s",correu);
+if (DEBUG) printf("correu entrat = %ls",correu);
 	i=1;
 	do{
-		printf("\n Entra la direcció de %s\t: ",nom);
+		printf("\n Entra la direcció de %ls %ls %ls\t: ",nom, cognom1, cognom2);
 		fflush(stdin);
 		fgetws(direccio,MAXLLETRES,stdin);
 		i=valida_text(direccio);
 //		printf("bolea  = %d",i);
 	}while(i!=0);
 	treu_intro(direccio);
-if (DEBUG) printf("direcció entrada = %s",direccio);
+if (DEBUG) printf("direcció entrada = %ls",direccio);
 	i=1;
 	do {
-		printf("\nEntra el telefon de casa de %s\t: ",nom);
+		printf("\nEntra el telefon de casa de %ls %ls %ls\t: ",nom, cognom1, cognom2);
 		fflush(stdin);
 		fgetws(telcasa,MAXTELEFON,stdin);
 		i=valida_telefon(telcasa);
 	}while (i!=0);
 	treu_intro(telcasa); //borra l'ultim nº entrat ? pk ?
-if (DEBUG) printf("telefon casa entrat = %s ",telcasa);
+if (DEBUG) printf("telefon casa entrat = %ls ",telcasa);
 	i=1;
 	do {
-		printf("\nEntra el mòbil de %s\t: ",nom);
+		printf("\nEntra el mòbil de %ls %ls %ls\t: ",nom, cognom1, cognom2);
 		fgetws(telmob,MAXTELEFON,stdin);
 		i=valida_telefon(telmob);
 	}while (i!=0);
 	treu_intro(telmob);
-if (DEBUG) printf("mobil entrat  = %s",telmob);
+if (DEBUG) printf("mobil entrat  = %ls",telmob);
 	i=1;
 	do {
-		printf("\nEntra el tercer Telefon de %s\t: ",nom);
+		printf("\nEntra el tercer Telefon de %ls %ls %ls\t: ",nom,cognom1, cognom2);
 		fgetws(tel2,MAXTELEFON,stdin);
 		i=valida_telefon(tel2);
 	}while (i!=0);
 	treu_intro(tel2);
-if (DEBUG) printf("tercer telefon entrat = %s",tel2);
+if (DEBUG) printf("tercer telefon entrat = %ls",tel2);
 	i=1;
 //	do {
-	printf("\nEntra notes curtes de %s %s\t: ",nom,cognom1);
+	printf("\nEntra notes curtes de %ls %ls %ls\t: ",nom,cognom1,cognom2);
 	fgetws(altres,MAXTELEFON,stdin);
 //		i=valida_telefon(telmob);
 //	}while (i!=0);
 	treu_intro(altres);
 
-if (DEBUG) printf("notes curtes entrades = %s",altres);	
+if (DEBUG) printf("notes curtes entrades = %ls",altres);	
 
 }
 
@@ -497,7 +460,7 @@ void lectura_dades_notes(wchar_t data[MAXD], wchar_t lloc[MAXLL], wchar_t motiu[
 		//fflush(stdin);
 		i++;
 	}while(caducitat[0]!='s' && caducitat[0]!='S' && caducitat[0]!='n' && caducitat[0]!='N');
-	printf("\ncaducitat entrada = %c", caducitat);
+	if(DEBUG)printf("\ncaducitat entrada = %c", caducitat);
 
 }
 
@@ -613,25 +576,25 @@ void menui(char tria)//menu d'inserció 1
 		      }
 	else  if(tria=='t'){ 
 //			printf("falta fer codi d'aquesta part d'insertar telefons");
-			sprintf(buffer,"%s nextval('id_seq'),\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\');",INSERTT,nom, cognom1,cognom2,correu,direccio,telcasa,telmob,tel2,altres);
+			sprintf(buffer,"%s nextval('id_seq'),\'%ls\',\'%ls\',\'%ls\',\'%ls\',\'%ls\',\'%ls\',\'%ls\',\'%ls\',\'%ls\');",INSERTT,nom, cognom1,cognom2,correu,direccio,telcasa,telmob,tel2,altres);
 			if (DEBUG) printf("Buffer telefons = %s",buffer);
 			}
 	resultado = PQexec(conexion,buffer);
 //codi mogut, anava després de la construcció de l'insert de telefons, i just a sobre del sprintf(buffer,"%s",selectn);
 	if (!resultado || PQresultStatus(resultado) != PGRES_COMMAND_OK) {
-					printf("el comando INSERT de notes ha fallat\n");
+					if(DEBUG)printf("el comando INSERT de notes ha fallat\n");
 					PQclear(resultado);
 			               	PQfinish(conexion);
 	}
 	else {
-		printf("he insertat a la base de dades !!!");
+		if(DEBUG)printf("he insertat a la base de dades !!!");
 		resultado = PQexec(conexion,"COMMIT");
 		if (!resultado || PQresultStatus(resultado) != PGRES_COMMAND_OK) {
-					        		        printf("el comando BEGIN ha fallat\n");
+					        		        if(DEBUG)printf("el comando BEGIN ha fallat\n");
 							                PQclear(resultado);
 							                PQfinish(conexion);
 								        }
-		else printf("\ncommit fet a la DB\n");
+		else if(DEBUG)printf("\ncommit fet a la DB\n");
 	}
 	if(tria=='n') sprintf(buffer,"%s",SELECTN);
 	else if(tria=='t') sprintf(buffer,"%s",SELECTT);
@@ -655,48 +618,77 @@ int allargada_identificador(wchar_t *identificador)
 //fi copia
 
 }
-int comprova_identificador(wchar_t *identificador, int id_min, int id_max)
+/*int comprova_identificador(wchar_t *identificador, int id_min, int id_max)
 {
 
 	int i;
 	int bolea=0;
 	//int longitud=atoi(identificador);
-	//int deb=1; //deb =0 no debug, deb =1 debug
-	int allargada = allargada_identificador(identificador);
 	
-	if (DEBUG==1)printf("allargada_identificador = %d",allargada);//printf("longitud =%d",longitud);
+	int longitud=allargada_identificador(identificador);
+
+	int allargada;//=atoi(identificador);// = allargada_identificador(identificador);
+	char llarg;
+	//sprintf
+	//memcpy(llarg,identificador,longitud);
+	allargada=wcstol(identificador,NULL, allargada);
+	printf("llarg char = %c",llarg);
+	if (DEBUG==1){
+			printf("allargada=atoi(identificador) = %d",allargada);//printf("longitud =%d",longitud);
+			printf("longitud del número = %d", longitud);
+			}
 	//if (longitud>=id_min && longitud<=id_max) {
-	if(allargada>=id_min && allargada<=id_max){
+	if(allargada>id_min && allargada<=id_max){
 					printf("\n\nvalor correcte\n");
 					//return 1;
-					bolea=1;
+					//bolea=atoi(identificador);
 	}
 	else {
 		printf("\n\nvalor fora de rang!!\n");
 		//return 10;
 		bolea=0;
 	}
- return bolea;
-}
-int llegir_identificador(wchar_t *identificador, int id_min, int id_max)
+ return allargada;
+}*/
+
+int array_length(char a[]){ 
+    return sizeof(a)/sizeof(char); 
+} 
+
+int llegir_identificador(wchar_t *identificador, int id_min, int id_max, int id)
 {
 	//int i;
 	int bolea=0;
 	//int deb=1; //deb = 0 no debug, deb = 1 debug
-	int max=8;
-	printf("%s",identificador);
-	//fflush(stdin);	
-	while(bolea==0 ){
+	long int max=8;
+
+	char buffer[4],allargada;
+	int ret;
+	int conv[5];
+
+	while(bolea==0  ){
 		//fflush(stdin);
-		//printf("\n\nentra l'id que vols borrar ");
-		fgetws(identificador,3,stdin);
-		//fflush(stdin);
-		bolea=comprova_identificador(identificador,id_min, id_max);
-		if (DEBUG)printf("bolea == %d, identificador = %s",bolea,identificador);
+		printf("\n\nentra BÉ l'id que vols borrar ");
+		fgetws(identificador,32,stdin);
+		treu_intro(identificador);	
+		ret = wcstombs ( buffer, identificador, sizeof(buffer) );
+		//max=strtol(max, identificador,32);
+		printf("max = %ld",max);
+		if (ret==2) buffer[3]='\0';
+		if (ret){
+			// printf ("multibyte string: %s \n allargada = %d",buffer,array_length(buffer));
+			bolea=1;
+		}
+		else {
+			//printf("això no funciona?");
+			bolea=0;
+			}
+		if (DEBUG)printf("bolea == %d, buffer = %s",bolea,buffer);
+		
 	}
-	//bolea=(int *)identificador[0];
-	//passar el parser de l'inici, que em canvia valors caracters per valors enters
-	return bolea;
+	int valor=atoi(buffer);
+	printf("valor %d ¿?¿¿?¿?",valor);
+	return valor;
 
 
 }
@@ -751,27 +743,32 @@ if (tria=='n'){
 	resultado = PQexec(conexion,buffer);
         columnas = PQnfields(resultado); // Obtenemos el numero de columnas
         filas = PQntuples(resultado); //Obtener el numero de filas
-if (tria=='n') for(i=0; i<filas; i++) {
-		printf("\nIdentificador del camp %d : %s",i,(int*)PQgetvalue(resultado,i,0));
-		printf("\ndata %d: %s",i, (char*)PQgetvalue(resultado,i,1));
-		posa_cometa(PQgetvalue(resultado,i,2));
-                printf("\nlloc %d: %s",i, (char*)PQgetvalue(resultado,i,2));	//modificar pk no surtin l'escape de cometes
-		posa_cometa(PQgetvalue(resultado,i,3));
-                printf("\nmotiu %d: %s",i, (char*)PQgetvalue(resultado,i,3));	//modificar pk no surtin l'escape de cometes
-		printf("\ncaducitat %d: %s",i, (char*)PQgetvalue(resultado,i,4));
-                printf("\n**********************************\n");
-		paginacio(i);
-		if (i==0) {
-				id_min=atoi(PQgetvalue(resultado,i,0));
-				if (DEBUG)printf("id_min =%d i=0",id_min);
-			}
-		if (i==filas-1){
+if (tria=='n') {
+		printf("\n\nDADES QUE ES PODEN BORRAR\n\n");
+		for(i=0; i<filas; i++) {
+			printf("\nIdentificador del camp %d : %s",i,(int*)PQgetvalue(resultado,i,0));
+			printf("\ndata %d: %s",i, (char*)PQgetvalue(resultado,i,1));
+			posa_cometa(PQgetvalue(resultado,i,2));
+      			printf("\nlloc %d: %s",i, (char*)PQgetvalue(resultado,i,2));	//modificar pk no surtin l'escape de cometes
+			posa_cometa(PQgetvalue(resultado,i,3));
+                	printf("\nmotiu %d: %s",i, (char*)PQgetvalue(resultado,i,3));	//modificar pk no surtin l'escape de cometes
+			printf("\ncaducitat %d: %s",i, (char*)PQgetvalue(resultado,i,4));
+			printf("\n**********************************\n");
+			paginacio(i);
+			if (i==0) {
+					id_min=atoi(PQgetvalue(resultado,i,0));
+					if (DEBUG)printf("id_min =%d i=0",id_min);
+				}
+			if (i==filas-1){
 				 id_max=atoi(PQgetvalue(resultado,i,0));
 				if (DEBUG)printf("id_max = %d i=filas-1",id_max);
 			}
-        }
-/*else if (tria=='t') {
-	printf("mostrar dades de la taula telefons");
+        	}
+		PQclear(resultado);
+	        PQfinish(conexion);
+}
+else if (tria=='t') {
+	printf("\n\nDADES QUE ES PODEN BORRAR\n\n");
 	for(i=0; i<filas; i++) {
 		printf("\nIdentificador del camp %d : %s",i,(int*)PQgetvalue(resultado,i,0));
 		printf("\ndata %d: %s",i, (char*)PQgetvalue(resultado,i,1));
@@ -780,7 +777,20 @@ if (tria=='n') for(i=0; i<filas; i++) {
 		posa_cometa(PQgetvalue(resultado,i,3));
                 printf("\nmotiu %d: %s",i, (char*)PQgetvalue(resultado,i,3));	//modificar pk no surtin l'escape de cometes
 		printf("\ncaducitat %d: %s",i, (char*)PQgetvalue(resultado,i,4));
-                printf("\n**********************************\n");
+			posa_cometa(PQgetvalue(resultado,i,5));
+                printf("\nmotiu %d: %s",i, (char*)PQgetvalue(resultado,i,5));
+		posa_cometa(PQgetvalue(resultado,i,6));
+                printf("\nmotiu %d: %s",i, (char*)PQgetvalue(resultado,i,6));
+		posa_cometa(PQgetvalue(resultado,i,7));
+                printf("\nmotiu %d: %s",i, (char*)PQgetvalue(resultado,i,7));
+		posa_cometa(PQgetvalue(resultado,i,8));
+                printf("\nmotiu %d: %s",i, (char*)PQgetvalue(resultado,i,8));
+		posa_cometa(PQgetvalue(resultado,i,9));
+                printf("\nmotiu %d: %s",i, (char*)PQgetvalue(resultado,i,9));
+		//posa_cometa(PQgetvalue(resultado,i,10));
+	        //        printf("\nmotiu %d: %s",i, (char*)PQgetvalue(resultado,i,10));
+               	//posa_cometa(PQgetvalue(resultado,i,10));
+                //printf("\nmotiu %d: %s",i, (char*)PQgetvalue(resultado,i,3));printf("\n**********************************\n");
 		paginacio(i);
 		if (i==0) {
 				id_min=atoi(PQgetvalue(resultado,i,0));
@@ -791,10 +801,11 @@ if (tria=='n') for(i=0; i<filas; i++) {
 				if (DEBUG)printf("id_max = %d",id_max);
 			}
         }
-
+	PQclear(resultado);
+//        PQfinish(conexion);
 }
-else printf("falla al mostrar les dades per borrarles ?");
-*/
+//else printf("falla al mostrar les dades per borrarles ?");
+
 //		fflush(stdin);
 	//codi borrat lectura dades
 	//printf("\nEscriu l'identificador de camp que vulguis borrar :");
@@ -802,67 +813,80 @@ if (tria=='n'){
 		while (bolea==0){
 			printf("\nEscriu l'identificador de camp que vulguis borrar :");
 			fflush(stdin);
-			bolea=llegir_identificador(identificador, id_min, id_max);
+			bolea=llegir_identificador(identificador, id_min, id_max,id ); //No guardo bé el que retorno ... mirar a veure per què falla ...
 		}
+		if(DEBUG)printf("bbbbolea = %ld",bolea);
 	}
-/*else if(tria=='t') {
+else if(tria=='t') {
 		while (bolea==0){
-			 printf("Escriu l'id del telefon que vols borrar\"falta implementar tot el codi\"");
-
-			bolea=llegir_identificador(identificador,id_min, id_max);
+			printf("Escriu l'id del telefon que vols borrar\"falta implementar tot el codi\"");
+			fflush(stdin);
+			bolea=llegir_identificador(identificador,id_min, id_max,id);//No guardo bé el que retorno ... mirar a veure per què falla ...
 			}
 		}
 	//fi codi borrat lectura dades
-*/
+
 	
 //fi select per borrar
-	printf("Identificador borrar abans debug de connectat = %s", identificador);
-	id=atoi(identificador);
-	printf("\n\n\tid = %d", id);
+	if(DEBUG)printf("Identificador borrar abans debug de connectat = %d", bolea);
+	id=bolea;//atoi((char*)identificador);
+	fflush(stdin);
+	if(DEBUG)printf("\n\n\tid = %d", id);
         if (DEBUG){
 		 printf(" Conectat!!! \n");
 		printf("\n Valor identificador = %d\n ",id);//identificador);
-		if (tria=='n')debug_delete = fopen("deleten.log.txt","w");
-		else if(tria=='t')debug_delete= fopen("deletet.log.txt","w");
-        PQtrace(conexion, debug_delete); /* Aqui le asignamos al archivo la salida  */
 	}
+	if (tria=='n')debug_delete = fopen("deleten.log.txt","w");
+	else if(tria=='t')debug_delete= fopen("deletet.log.txt","w");
+        PQtrace(conexion, debug_delete); /* Aqui le asignamos al archivo la salida  */
+	
 	//id=atoi(identificador);
 	//printf("Id després de triar el fitxer de log = %d, identificador =", id,identificador);
 	if (tria=='n'){
 			if(DEBUG)printf("\nborrar = %s'%d'",DELETEN,id);
-			sprintf(buffer,"%s'%d'",DELETEN,id); //construcció 
-			printf("Sentencia de borrar = %s", buffer);
+			sprintf(buffer,"%s%d",DELETEN,id); //construcció 
+			if(DEBUG)printf("\nSentència de borrar = %s\n", buffer);
 		}
-		/*else if(tria=='t') 	{
-						if(DEBUG)printf("\n borrar = %s'%d'", DELETET,id);
-					  sprintf(buffer,"%s'%d'",DELETET,id);
-					  printf("construcció de la sentencia %s que no esta feta",buffer);
-
-					}
-		*/
-if (DEBUG)	printf("Buffer fora bucles = %s",buffer);
+	else if(tria=='t') 	{
+	   			if(DEBUG)printf("\n borrar = %s'%d'", DELETET,id);
+				sprintf(buffer,"%s%d",DELETET,id);
+				if(DEBUG)printf("\nSentència de borrar %s\n",buffer);
+				}
+		
+if (DEBUG)	printf("\n\n\n\t\tBuffer fora bucles = %s",buffer);
 //if (tria=='n') 
-resultado = PQexec(conexion,buffer);
-//	else if(tria=='t') printf("eliminar això per l'execució del delete de telefons");
+PQexec(conexion,buffer);
+printf("registre borrat ???? comprobar-ho!!");
+//	e1±lse if(tria=='t') printf("eliminar això per l'execució del delete de telefons");
 
-        if (!resultado || PQresultStatus(resultado) != PGRES_COMMAND_OK) {
+/*        if (!resultado || PQresultStatus(resultado) != PGRES_COMMAND_OK) {
                if (tria=='n')
 			{ 
-				 printf("la comanda DELETE de notes ha fallat\n");
-				PQclear(resultado);
-		                PQfinish(conexion);
+				if(DEBUG) printf("la comanda DELETE de notes ha fallat\n");
+				//PQclear(resultado);
+		                //PQfinish(conexion);
 			}
-			//else if(tria=='t')printf("la comanda DELETE de telefons no esta construida\n");
+			else if(tria=='t'){
+					if(DEBUG)printf("la comanda DELETE de telefons ha fallat\n");
+					//PQclear(resultado);
+					//PQfinish(conexion);
+				}
         }
 	else{
 		printf("he borrat de la base de dades !!!");
-	}
+		/*char *kk;
+		char a;
+		fflush(stdin);
+		scanf("%c", &a);
+		fgets(kk,1024, stdin);
+		fflush(stdin);*/
+//	}
 
-if (tria=='n')	//s'ha de borrar un cop fet el codi de borrar i existeix la taula de telefons i demés ...
+/*if (tria=='n' || tria=='t')	//s'ha de borrar un cop fet el codi de borrar i existeix la taula de telefons i demés ...
 	{ 
 	PQclear(resultado);
         PQfinish(conexion);
-	}
+	}*/
 }
 
 int menuc(char tria) //menu de consulta 2
@@ -925,6 +949,7 @@ int dades(char tria)
 				{
 				if (tria=='n')  menunotes("notes");
 				else if(tria=='t') menunotes("telefons");
+					cadena[0]=' ';
 					  printf ("Introdueix una opció: ");
 					  fflush(stdin);
 					  fgetws (cadena, 100, stdin);
@@ -1012,8 +1037,8 @@ int main ()
 		
 				  	  switch(opcio)
 							{
-							case 49: printf("\nnotes de l'agenda\n");dades('n');break;
-							case 50: printf("\nTelèfons de l'agenda\n");dades('t');break;
+							case 49: printf("\nnotes de l'agenda\n");dades('n');cadena[0]='a';break;
+							case 50: printf("\nTelèfons de l'agenda\n");dades('t');cadena[0]='a';break;
 							case 51: printf("\nSortir d'agenda\n");break;
 							default : printf("\nno entra als casos, va a default!!!\n");break;
 							}
