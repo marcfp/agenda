@@ -178,7 +178,8 @@ elm_object_text_set(bt_torna, "Torna");
 evas_object_smart_callback_add(bt_torna, "clicked",_torna, win);
 
 evas_object_resize(bt_torna, 100, 60);
-evas_object_move(bt_torna, (ALT/2)-50, (7*AMPLA/8)-40);
+//evas_object_move(bt_torna, (ALT/2)-50, (7*AMPLA/8)-40);
+// elm_grid_pack(gd, bt_torna, 70,80,15,15);
 evas_object_show(bt_torna);
 
    evas_object_smart_callback_add(popup, "block,clicked", _block_clicked, NULL);
@@ -249,7 +250,8 @@ evas_object_smart_callback_add(bt_torna, "clicked",_torna, win);
 evas_object_smart_callback_add(bt_torna, "clicked",_mostra_principal, data);
 evas_object_smart_callback_add(win, "delete,request", _main_win_del_cb,NULL);
 evas_object_resize(bt_torna, 100, 60);
-evas_object_move(bt_torna, (WIDTH/2)-50, (7*HEIGHT/8)-40);
+//evas_object_move(bt_torna, (WIDTH/2)-50, (7*HEIGHT/8)-40);
+ elm_grid_pack(gd, bt_torna, 70,80,15,15);
 evas_object_show(bt_torna);
 
 
@@ -294,6 +296,7 @@ evas_object_smart_callback_add(bt_torna, "clicked",_torna, win);
 
 evas_object_resize(bt_torna, 100, 60);
 evas_object_move(bt_torna, (ALT/2)-50, (7*AMPLA/8)-40);
+// elm_grid_pack(gd, bt_torna, 70,80,15,15);
 evas_object_show(bt_torna);
 
    evas_object_smart_callback_add(popup, "block,clicked", _block_clicked, NULL);
@@ -363,7 +366,8 @@ evas_object_smart_callback_add(bt_torna, "clicked",_torna, win);
 evas_object_smart_callback_add(bt_torna, "clicked",_mostra_principal, data);
 evas_object_smart_callback_add(win, "delete,request", _main_win_del_cb,NULL);
 evas_object_resize(bt_torna, 100, 60);
-evas_object_move(bt_torna, (WIDTH/2)-50, (7*HEIGHT/8)-40);
+//evas_object_move(bt_torna, (WIDTH/2)-50, (7*HEIGHT/8)-40);
+ elm_grid_pack(gd, bt_torna, 70,80,15,15);
 evas_object_show(bt_torna);
 
 
@@ -399,6 +403,7 @@ evas_object_smart_callback_add(bt_torna, "clicked",_torna, win);
 
 evas_object_resize(bt_torna, 100, 60);
 evas_object_move(bt_torna, (ALT/2)-50, (7*AMPLA/8)-40);
+// elm_grid_pack(gd, bt_torna, 70,80,15,15);
 evas_object_show(bt_torna);
 
    evas_object_smart_callback_add(popup, "block,clicked", _block_clicked, NULL);
@@ -475,11 +480,13 @@ _afegir(void *data, Evas_Object *obj, void *event_info)
 
    bt_torna = elm_button_add(win);
 elm_object_text_set(bt_torna, "Torna");
+
 evas_object_smart_callback_add(bt_torna, "clicked",_torna, win);
 evas_object_smart_callback_add(bt_torna, "clicked",_mostra_principal, data);
 evas_object_smart_callback_add(win, "delete,request", _main_win_del_cb,NULL);
 evas_object_resize(bt_torna, 100, 60);
-evas_object_move(bt_torna, (WIDTH/2)-50, (7*HEIGHT/8)-40);
+//evas_object_move(bt_torna, (WIDTH/2)-50, (7*HEIGHT/8)-40);
+ elm_grid_pack(gd, bt_torna, 70,80,15,15);
 evas_object_show(bt_torna);
 
    evas_object_resize(win, WIDTH, HEIGHT);
@@ -495,7 +502,7 @@ _hora(void *data, Evas_Object *obj, void *event_info)
 EAPI_MAIN int
 elm_main(int argc, char **argv)
 {
-	Evas_Object *finestra,*bg, *Caixa, *bt_quit, *bt_drop, *bt_search, *bt_add, *datetime, *ck;
+	Evas_Object *finestra, *gd, *bg, *Caixa, *bt_quit, *bt_drop, *bt_search, *bt_add, *datetime, *ck;
 
 	finestra =elm_win_util_standard_add("principal", "Agenda");
 
@@ -508,6 +515,13 @@ elm_main(int argc, char **argv)
 	
 	evas_object_size_hint_align_set(finestra, EVAS_HINT_FILL, EVAS_HINT_FILL);
 
+gd = elm_grid_add(finestra);
+   elm_grid_size_set(gd, 100, 100);
+   evas_object_size_hint_weight_set(gd, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+   elm_win_resize_object_add(finestra, gd);
+   evas_object_show(gd);
+
+
 	bg = elm_bg_add(finestra);
 
 
@@ -517,7 +531,12 @@ elm_clock_show_seconds_set(ck, EINA_TRUE);
 elm_clock_show_am_pm_set(ck, EINA_FALSE);
 elm_box_pack_end(finestra, ck);
 evas_object_resize(ck, 120,120);
-evas_object_move(ck, 3*(WIDTH/4)-60, 5*(HEIGHT/8));
+//evas_object_move(ck, 3*(WIDTH/4)-60, 5*(HEIGHT/8));
+ //how a container object should resize a given child within its area
+    evas_object_size_hint_weight_set(ck, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+    //how to align an object
+    evas_object_size_hint_align_set(ck, EVAS_HINT_FILL, 0.5);
+elm_grid_pack(gd, ck, 60, 60, 25, 10);
 evas_object_show(ck);
 
 //AFEGIR
@@ -525,7 +544,13 @@ bt_add = elm_button_add(finestra);
 elm_object_text_set(bt_add, "Afegir ");
 evas_object_smart_callback_add(bt_add, "clicked", _afegir, finestra);
 evas_object_resize(bt_add, 120, 80);
-evas_object_move(bt_add,(WIDTH/2)-60, (HEIGHT/8)-40); 
+//evas_object_move(bt_add,(WIDTH/2)-60, (HEIGHT/8)-40);
+ //how a container object should resize a given child within its area
+    evas_object_size_hint_weight_set(bt_add, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+    //how to align an object
+    evas_object_size_hint_align_set(bt_add, EVAS_HINT_FILL, 0.5);
+ 
+elm_grid_pack(gd, bt_add, 20, 10, 25, 10);
 evas_object_show(bt_add);
 
 //CONSULTAR
@@ -533,7 +558,14 @@ bt_search = elm_button_add(finestra);
 elm_object_text_set(bt_search, "Cerca ");
 evas_object_smart_callback_add(bt_search, "clicked", _cerca, finestra);
 evas_object_resize(bt_search, 120,80);
-evas_object_move(bt_search, (WIDTH/2)-60, (3*HEIGHT/8)-40);
+//evas_object_move(bt_search, (WIDTH/2)-60, (3*HEIGHT/8)-40);
+ //how a container object should resize a given child within its area
+    evas_object_size_hint_weight_set(bt_search, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+    //how to align an object
+    evas_object_size_hint_align_set(bt_search, EVAS_HINT_FILL, 3.5);
+
+elm_grid_pack(gd, bt_search, 20, 30, 25, 10);
+
 evas_object_show(bt_search);
 
 //BORRAR
@@ -541,7 +573,14 @@ bt_drop = elm_button_add(finestra);
 elm_object_text_set(bt_drop, "Borra ");
 evas_object_smart_callback_add(bt_drop, "clicked", _esborra, finestra);
 evas_object_resize(bt_drop, 120,80);
-evas_object_move(bt_drop, (WIDTH/2)-60, (5*HEIGHT/8)-40);
+//evas_object_move(bt_drop, (WIDTH/2)-60, (5*HEIGHT/8)-40);
+ //how a container object should resize a given child within its area
+    evas_object_size_hint_weight_set(bt_drop, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+    //how to align an object
+    evas_object_size_hint_align_set(bt_drop, EVAS_HINT_FILL, 0.5);
+
+elm_grid_pack(gd, bt_drop, 20, 50, 25, 10);
+
 evas_object_show(bt_drop);
 
 //SORTIR
@@ -549,7 +588,15 @@ bt_quit = elm_button_add(finestra);
 elm_object_text_set(bt_quit, "Surt");
 evas_object_smart_callback_add(bt_quit, "clicked",_main_win_del_cb, finestra);
 evas_object_resize(bt_quit, 100, 60);
-evas_object_move(bt_quit, (WIDTH/2)-50, (7*HEIGHT/8)-40);
+//evas_object_move(bt_quit, (WIDTH/2)-50, (7*HEIGHT/8)-40);
+
+ //how a container object should resize a given child within its area
+ //   evas_object_size_hint_weight_set(bt_quit, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+    //how to align an object
+//    evas_object_size_hint_align_set(bt_quit, EVAS_HINT_FILL, 0.5);
+
+elm_grid_pack(gd, bt_quit, 17, 70, 30, 20);
+
 evas_object_show(bt_quit);
 	evas_object_show(bg);
 	evas_object_show(finestra);
