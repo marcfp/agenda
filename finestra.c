@@ -1,4 +1,4 @@
-
+//https://www.enlightenment.org/program_guide/event_effect_pg
 #ifdef HAVE_ELEMENTARY_X
 # include <Ecore_X.h>
 #endif
@@ -499,21 +499,124 @@ _hora(void *data, Evas_Object *obj, void *event_info)
 	if(DEBUG)printf("\nhora?\n");
 }
 
+static void
+_slide_end_cb(void *data, Evas_Object *obj, void *event_info)
+{
+   printf("\nSlide has reach the end.\n");
+}
+
+/*
+static Eina_Bool
+_do_rotate(void *data, double pos)
+{
+   // Get the animation target
+   Evas_Object *obj = data;
+   // Declaration of an `Evas_Map`
+   Evas_Map *m;
+   // Variables to store the target size and position
+   int x, y, w, h;
+ 
+   // Getting the size and position of the target
+   evas_object_geometry_get(obj, &x, &y, &w, &h);
+   // Creation of an `Evas_Map` of 4 points
+   m = evas_map_new(4);
+   // Populate source and destination map points to match exactly object.
+   evas_map_util_points_populate_from_object(m, obj);
+   // Create a rotation of 360° with x+(w/2) "x" center and y +(h/2) "y" center.
+   evas_map_util_rotate(m, 360.0 * pos, x + (w / 2), y + (h / 2));
+   // Setting the object to "animate" in the `Evas_Map`
+   evas_object_map_set(obj, m);
+   // Starting the Animation
+   evas_object_map_enable_set(obj, EINA_TRUE);
+   // Free used memory
+ //  evas_map_free(m);
+ 
+   return EINA_TRUE;
+}
+*/
+static Eina_Bool
+_do_3d(void *data, double pos)
+{
+   Evas_Object *obj = data;
+   Evas_Map *m;
+   int x, y, w, h;
+ 
+   evas_object_geometry_get(obj, &x, &y, &w, &h);
+   m = evas_map_new(4);
+   evas_map_util_points_populate_from_object(m, obj);
+   evas_map_util_3d_rotate(m, pos * 360, pos * 360, pos * 360, x + (w / 3), y + 60, 0);
+   evas_object_map_set(obj, m);
+   evas_object_map_enable_set(obj, EINA_TRUE);
+   evas_map_free(m);
+ 
+   return EINA_TRUE;
+}
+
+static void
+_btn_rotate_cb(void *data, Evas_Object *btn, void *ev)
+{
+   Evas_Object *target = data;
+   ecore_animator_timeline_add(1, _do_3d, target);
+}
+
+
+static void
+_signal_cb(void *data, Evas_Object *obj, const char *emission, const char *source)
+{
+   printf("Info received from layout : %s %s\n", emission, source);
+}
+
+static Eina_Bool
+_do_animation(void *data, double pos)
+{
+   //evas_object_move(data, pos, pos);
+   // Do some more animating...
+}
+
+static Eina_Bool
+_my_animation(void *data, double pos)
+{
+   Evas_Object *obj = data;                       // Get the target object
+   int x, y, w, h;                                // Target object geometry
+   evas_object_geometry_get(obj, &x, &y, &w, &h); // Get current object position and size attributes
+   evas_object_move(obj, 500 * pos, y);           // Linear translation of the Evas object
+}
+
 EAPI_MAIN int
 elm_main(int argc, char **argv)
 {
-	Evas_Object *finestra, *gd, *bg, *Caixa, *bt_quit, *bt_drop, *bt_search, *bt_add, *datetime, *ck;
+	Evas_Object *finestra, *text, *text1, *layout, *tab, *rec, *gd, *bg, *Caixa, *bt_quit, *bt_drop, *bt_search, *bt_add, *datetime, *ck;
 
+Evas_Object *target;//animation object
 	finestra =elm_win_util_standard_add("principal", "Agenda");
+	elm_policy_set(ELM_POLICY_QUIT, ELM_POLICY_QUIT_LAST_WINDOW_CLOSED);
+elm_win_autodel_set(finestra, EINA_TRUE);
 
-	elm_policy_set(ELM_POLICY_QUIT, ELM_POLICY_QUIT_LAST_WINDOW_CLOSED);//per tancar
+
+//	elm_policy_set(ELM_POLICY_QUIT, ELM_POLICY_QUIT_LAST_WINDOW_CLOSED);//per tancar
 
 	elm_win_title_set(finestra, "Pantalla principal de l'agenda");
-	elm_win_autodel_set(finestra, EINA_TRUE);
+//	elm_win_autodel_set(finestra, EINA_TRUE);
 	elm_win_focus_highlight_enabled_set(finestra, EINA_TRUE);
 	evas_object_resize(finestra, WIDTH, HEIGHT);
-	
 	evas_object_size_hint_align_set(finestra, EVAS_HINT_FILL, EVAS_HINT_FILL);
+	//layout = elm_layout_add(finestra);
+	//elm_layout_file_set(layout, "edje_animation.edj", "my_layout");
+	
+	
+
+
+//mínim de 320x240 
+tab = elm_table_add(finestra);
+   evas_object_size_hint_weight_set(tab, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+   elm_win_resize_object_add(finestra, tab);
+   evas_object_show(tab);
+ 
+   rec = evas_object_rectangle_add(evas_object_evas_get(finestra));
+   evas_object_size_hint_weight_set(rec, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+   evas_object_size_hint_align_set(rec, EVAS_HINT_FILL, EVAS_HINT_FILL);
+   evas_object_size_hint_min_set(rec, 320 * elm_config_scale_get(), 240 * elm_config_scale_get());
+   elm_table_pack(tab, rec, 0, 0, 1, 1);
 
 gd = elm_grid_add(finestra);
    elm_grid_size_set(gd, 100, 100);
@@ -525,18 +628,51 @@ gd = elm_grid_add(finestra);
 	bg = elm_bg_add(finestra);
 
 
+//https://www.enlightenment.org/start?do=search&id=animation  <- d'aquí penja tot
+//https://www.enlightenment.org/tutorial/effects/edje_animation/start_up
+//https://www.enlightenment.org/tutorial/effects/edje_animation/on_click
+//https://www.enlightenment.org/program_guide/event_effect/evas_map_animations
+//https://www.enlightenment.org/tutorial/effects_tutorial
+
+
+/* pròximes entrades */
+Evas_Object *table, *rect;
+table = evas_object_table_add(finestra);
+evas_object_table_homogeneous_set(table, EVAS_OBJECT_TABLE_HOMOGENEOUS_NONE);
+evas_object_table_padding_set(table, 20, 20);
+//evas_object_resize(table, 200, 600);
+elm_grid_pack(gd,table,48,42,50,50);
+evas_object_show(table);
+rect = evas_object_rectangle_add(finestra);
+evas_object_color_set(rect, 10, 10,10,10); //255, 255, 255);
+evas_object_size_hint_min_set(rect, 300, 300);
+elm_grid_pack(gd, rect, 48, 42, 50, 50);
+//evas_object_resize(rect, 110,110);
+evas_object_show(rect);
+//how a container object should resize a given child within its area
+evas_object_size_hint_weight_set(table, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+//how to align an object
+evas_object_size_hint_align_set(table, EVAS_HINT_FILL, 0.5);
+evas_object_table_pack(table, rect, 1, 1, 1, 1);
+//how a container object should resize a given child within its area
+evas_object_size_hint_weight_set(rect, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+//how to align an object
+evas_object_size_hint_align_set(rect, EVAS_HINT_FILL, 0.5);
+elm_grid_pack(gd, table,48,42,50,50);
+/*fi pròximems entrades*/
+
 //RELLOTGE
 ck = elm_clock_add(finestra);
 elm_clock_show_seconds_set(ck, EINA_TRUE);
 elm_clock_show_am_pm_set(ck, EINA_FALSE);
 elm_box_pack_end(finestra, ck);
-evas_object_resize(ck, 120,120);
+evas_object_resize(ck, 110,110);
 //evas_object_move(ck, 3*(WIDTH/4)-60, 5*(HEIGHT/8));
  //how a container object should resize a given child within its area
     evas_object_size_hint_weight_set(ck, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
     //how to align an object
     evas_object_size_hint_align_set(ck, EVAS_HINT_FILL, 0.5);
-elm_grid_pack(gd, ck, 60, 60, 25, 10);
+elm_grid_pack(gd, ck, 60, 30, 25, 8);
 evas_object_show(ck);
 
 //AFEGIR
@@ -596,10 +732,98 @@ evas_object_resize(bt_quit, 100, 60);
 //    evas_object_size_hint_align_set(bt_quit, EVAS_HINT_FILL, 0.5);
 
 elm_grid_pack(gd, bt_quit, 17, 70, 30, 20);
-
 evas_object_show(bt_quit);
+
+//elm_layout_file_set(layout, "edje_example.edj", "my_layout");
+//elm_layout_signal_callback_add(layout, "*", "*", _signal_cb, NULL);
+
+/*   evas_object_image_file_set(img, "./logo.png", NULL);
+   evas_object_move(img, 0, 0);
+   evas_object_resize(img, 200, 200);
+   evas_object_show(img);
+ */
+
+
+
+   Evas *e = evas_object_evas_get(finestra);
+ 
+   // Create an image object
+   Evas_Object *img = evas_object_image_filled_add(e);
+
+
+
+   // Create another image object
+   Evas_Object *img2 = evas_object_image_filled_add(e);
+   evas_object_image_file_set(img2, "./logo_blanc1.png", NULL);
+ 
+   // Disable smooth scaling
+   evas_object_image_smooth_scale_set(img2, EINA_TRUE);
+   elm_grid_pack(gd,img2, 56,1, 30, 30);
+   evas_object_move(img2, 400, 30);
+   evas_object_resize(img2, 2, 2);
+   evas_object_show(img2);
+
+
+
+
+//ANIMACIÓ
+Elm_Transit *transit = elm_transit_add();
+text= elm_label_add(finestra);//evas_object_text_add(finestra);//elm_label_add(finestra);
+elm_object_text_set(text, "Agenda programada amb c");
+elm_label_slide_duration_set(text, 500);
+elm_label_slide_mode_set(text, ELM_LABEL_SLIDE_MODE_ALWAYS);
+elm_grid_pack(gd,text, 40,4, 60, 60);
+elm_object_style_set(text, "marker");
+evas_object_color_set(text, 0, 0, 255, 255);
+elm_transit_object_add (transit, text);
+elm_transit_effect_rotation_add(transit, 0, 360);
+elm_transit_duration_set(transit, 5);
+/*
+elm_transit_effect_add(Elm_Transit *                    transit,
+                       Elm_Transit_Effect_Transition_Cb transition_cb,
+                       Elm_Transit_Effect *             effect,
+                       Elm_Transit_Effect_End_Cb        end_cb
+                      )
+*/
+elm_transit_auto_reverse_set(transit, EINA_TRUE);
+elm_transit_effect_color_add(transit,0,0,0,0,225,225,0,225);
+elm_transit_go(transit);
+//elm_transit_effect_del(transit); 
+//https://www.enlightenment.org/program_guide/event_effect/elementary_transitions
+
+//https://www.enlightenment.org/program_guide/event_effect/ecore_animators#Create_an_Ecore_Animation 
+//https://www.enlightenment.org/program_guide/event_effect/elementary_transitions
+//https://www.enlightenment.org/program_guide/event_effect/elementary_transitions
+//ecore_animator_timeline_add(12, _do_animation, text);
+//elm_transit_paused_set(transit,                        Eina_Bool     paused  )
+evas_object_show(text);
+
+/*
+text1= elm_label_add(finestra);//evas_object_text_add(finestra);//elm_label_add(finestra);
+elm_object_text_set(text1, "Agenda programada amb c");
+elm_grid_pack(gd,text1, 40,4, 60, 60);
+evas_object_color_set(text1, 255,255,0, 255);
+evas_object_show(text1);
+*/
+
+/*
+Moure rellotge
+*/	
+   //d.smt = evas_smart_example_add(d.evas);
+  // evas_object_move(d.smt, WIDTH / 4, HEIGHT / 4);
+//evas_object_move(ck, 10,4);
+//evas_object_resize(ck,240, 240);
+//evas_object_show(ck);
+  // evas_object_resize(d.smt, WIDTH / 2, HEIGHT / 2);
+  // evas_object_show(d.smt);
+
+/*
+Fi Moure rellotge
+*/
 	evas_object_show(bg);
 	evas_object_show(finestra);
+
+ 
 
    elm_run();
    return 0;
