@@ -1,14 +1,21 @@
+ECHO=echo
 CC=gcc
-CFLAGS=-g -Wall
+CFLAGS=-g -W -Wall 
+EXTERN=-c 
 LIBS=-lpq -lm
 INCLUDES=-I /usr/include/postgresql/
-TARGET=Agenda
-PATH_FUNCIONS=../c/funcions/
-PATH_FHEADER=../c/headers/
+TARGET=Agenda_telefons
+TARGET_GRAFIC=Agenda_telefons_Efl
+PATH_FUNCIONS=funcions
 FUNCIONS=funcions
+GRAFIC=pkg-config --cflags --libs elementary evas ecore ecore-evas eina ecore-x
 
 all:
-	$(CC) -o $(TARGET) $(INCLUDES) $(LIBS) $(CFLAGS) $(TARGET).c $(PATH_FUNCIONS)$(FUNCIONS).c
-
+funcions:
+	$(CC) $(CFLAGS) $(EXTERN) $(PATH_FUNCIONS)/$(PATH_FUNCIONS).c 
+consola:
+	$(CC) -o $(TARGET) $(INCLUDES) $(LIBS) $(CFLAGS) $(TARGET).c $(FUNCIONS).o
+grafic:
+	$(CC) -o $(TARGET_GRAFIC) $(INCLUDES) $(LIBS) $(CFLAGS) $(TARGET_GRAFIC).c $(FUNCIONS).o `$(GRAFIC)`
 clean:
-	$(RM) $(TARGET)
+	$(RM) $(TARGET) $(TARGET_GRAFIC)
