@@ -1,4 +1,10 @@
 //aquest software està sota llicència CC BY SA 2.0
+
+//https://www.enlightenment.org/tutorial/form_tutorial <- mirar aquí, per veure com puc generar el naviframe del select a la base de dades guardant posició i offset
+//això n'és un altre exemple : 
+//https://www.enlightenment.org/tutorial/naviframe_tutorial
+//i això que no sé exactament què és : 
+//https://docs.enlightenment.org/stable/elementary/entry_example.html
 #include <stdio.h>
 #include <string.h>
 #include <libpq-fe.h>
@@ -6,7 +12,7 @@
 #include <wchar.h>
 #include <stdlib.h>
 #include <math.h>
-#include "../c/headers/funcions.h"
+#include "headers/funcions.h"
 
 
 
@@ -118,7 +124,7 @@ if (DEBUG) printf("cognom2 entrat = %ls",cognom2);
 	}while (i!=0);
 	treu_intro(correu);
 if (DEBUG) printf("correu entrat = %ls",correu);
-	i=1;
+	/*i=1;
 	do{
 		printf("\n Entra la direcció de %ls %ls %ls\t: ",nom, cognom1, cognom2);
 		fflush(stdin);
@@ -126,7 +132,7 @@ if (DEBUG) printf("correu entrat = %ls",correu);
 		i=valida_text(direccio);
 	}while(i!=0);
 	treu_intro(direccio);
-if (DEBUG) printf("direcció entrada = %ls",direccio);
+if (DEBUG) printf("direcció entrada = %ls",direccio);*/
 	i=1;
 	do {
 		printf("\nEntra el telefon de casa de %ls %ls %ls\t: ",nom, cognom1, cognom2);
@@ -212,11 +218,10 @@ void mostra_dades(int filas, PGresult *resultado, char tria)
 			posa_cometa(PQgetvalue(resultado,i,3));
 	                printf("\nSegon cognom %d: %s",i, (char*)PQgetvalue(resultado,i,3));	//modificar pk no surtin l'escape de cometes
 			printf("\nCorreu  %d: %s",i, (char*)PQgetvalue(resultado,i,4));
-			printf("\ndireccio  %d: %s",i, (char*)PQgetvalue(resultado,i,5));
-			printf("\ntelefon casa  %d: %s",i, (char*)PQgetvalue(resultado,i,6));
-			printf("\nmobil  %d: %s",i, (char*)PQgetvalue(resultado,i,7));
-			printf("\naltres telefons  %d: %s",i, (char*)PQgetvalue(resultado,i,8));
-			printf("\naltres dades  %d: %s",i, (char*)PQgetvalue(resultado,i,9));
+			printf("\ntelefon casa  %d: %s",i, (char*)PQgetvalue(resultado,i,5));
+			printf("\nmobil  %d: %s",i, (char*)PQgetvalue(resultado,i,6));
+			printf("\naltres telefons  %d: %s",i, (char*)PQgetvalue(resultado,i,7));
+			printf("\naltres dades  %d: %s",i, (char*)PQgetvalue(resultado,i,8));
 
 	                printf("\n**********************************\n");
 			paginacio(i);
@@ -274,7 +279,7 @@ void menui(char tria)//menu d'inserció 1
                                 NULL,//Opciones adicionales
                                 NULL, // Fichero o terminal de la salida
                                 "agenda",//Nombre de la base de datos
-                                "postgres", // Nombre de usuario
+                                "marc", // Nombre de usuario
                                 "Datsxku1!"); // PASSWORD del usuario
         if (PQstatus(conexion) == CONNECTION_BAD) {
                 if(DEBUG) printf("\n Error en la conexió a la base de dades de l'agenda ! ");
@@ -291,14 +296,16 @@ void menui(char tria)//menu d'inserció 1
 	}
 	
 	if(tria=='n') {
-			if(DEBUG)printf("sentenci = %s nextval('id_seq'), '%ls', '%ls', '%ls', '%ls');", INSERTN, data, lloc, motiu, caducitat);
+			if(DEBUG)printf("sentencia = %s nextval('id_seq'), '%ls', '%ls', '%ls', '%ls');", INSERTN,  lloc, motiu, caducitat, data);
 
-			sprintf(buffer,"%s nextval('id_seq'),\'%ls\',\'%ls\',\'%ls\',\'%ls\');",INSERTN,data,lloc,motiu,caducitat); //construcció de l'insert
-			if (DEBUG)	printf("Buffer = %s",buffer);
+			sprintf(buffer,"%s nextval('id_seq'),\'%ls\',\'%ls\',\'%ls\',\'%ls\');",INSERTN,lloc,motiu,caducitat,data); //construcció de l'insert
+			if (DEBUG)	printf("\nBuffer = %s \n",buffer);
 		      }
-	else  if(tria=='t'){ 
-			sprintf(buffer,"%s nextval('id_seq'),\'%ls\',\'%ls\',\'%ls\',\'%ls\',\'%ls\',\'%ls\',\'%ls\',\'%ls\',\'%ls\');",INSERTT,nom, cognom1,cognom2,correu,direccio,telcasa,telmob,tel2,altres);
-			if (DEBUG) printf("Buffer telefons = %s",buffer);
+	else  if(tria=='t'){
+			if(DEBUG) printf("\n\nsentencia = %s nextval('id_seq_telefons'),'%ls', '%ls', '%ls', '%ls', '%ls', '%ls', '%ls', '%ls','%ls');",INSERTT,nom, cognom1,cognom2,correu,telcasa,telmob,tel2,altres);
+
+			sprintf(buffer,"%s nextval('id_seq_telefons'),\'%ls\',\'%ls\',\'%ls\',\'%ls\',\'%ls\',\'%ls\',\'%ls\',\'%ls\');",INSERTT,nom, cognom1,cognom2,correu,telcasa,telmob,tel2,altres);
+			if (DEBUG) printf("\n\nBuffer telefons = %s",buffer);
 			}
 	resultado = PQexec(conexion,buffer);
 	if (!resultado || PQresultStatus(resultado) != PGRES_COMMAND_OK) {
@@ -404,7 +411,7 @@ if (tria=='n')	printf("\n\t\t\tELIMINACIÓ DE CITES EN L'AGENDA");
                                 NULL,//Opciones adicionales
                                 NULL, // Fichero o terminal de la salida
                                 "agenda",//Nombre de la base de datos
-                                "postgres", // Nombre de usuario
+                                "marc", // Nombre de usuario
                                 "Datsxku1!"); // PASSWORD del usuario
         if (PQstatus(conexion) == CONNECTION_BAD) {
                 printf("\n Error en la conexió a la base de dades de l'agenda ! ");
@@ -464,8 +471,8 @@ else if (tria=='t') {
                 printf("\nmotiu %d: %s",i, (char*)PQgetvalue(resultado,i,7));
 		posa_cometa(PQgetvalue(resultado,i,8));
                 printf("\nmotiu %d: %s",i, (char*)PQgetvalue(resultado,i,8));
-		posa_cometa(PQgetvalue(resultado,i,9));
-                printf("\nmotiu %d: %s",i, (char*)PQgetvalue(resultado,i,9));
+//		posa_cometa(PQgetvalue(resultado,i,9));
+  //              printf("\nmotiu %d: %s",i, (char*)PQgetvalue(resultado,i,9));
 		paginacio(i);
 		if (i==0) {
 				id_min=atoi(PQgetvalue(resultado,i,0));
@@ -509,8 +516,8 @@ else if(tria=='t') {
 	
 	if (tria=='n'){
 			if(DEBUG)printf("arribo notes");
-			if(DEBUG)printf("\nborrar = %s\'%d\';",DELETEN,id);
-			sprintf(buffer,"%s\'%d\';",DELETEN,id); //reventa aquí, fa un bucle molt gran ... com delimitar això ?
+			if(DEBUG)printf("\nborrar = %s%d;",DELETEN,id);
+			sprintf(buffer,"%s%d;",DELETEN,id); //reventa aquí, fa un bucle molt gran ... com delimitar això ?
 			if(DEBUG)printf("\nSentència de borrar = %s\n", buffer);
 		}
 	else if(tria=='t') 	{
@@ -528,7 +535,7 @@ if (DEBUG)	printf("\n\n\n\t\tBuffer fora bucles = %s",buffer);
                                 NULL,//Opciones adicionales
                                 NULL, // Fichero o terminal de la salida
                                 "agenda",//Nombre de la base de datos
-                                "postgres", // Nombre de usuario
+                                "marc", // Nombre de usuario
                                 "Datsxku1!"); // PASSWORD del usuario
         if (PQstatus(conexion) == CONNECTION_BAD) {
                 printf("\n Error en la conexió a la base de dades de l'agenda ! ");
@@ -537,8 +544,10 @@ if (DEBUG)	printf("\n\n\n\t\tBuffer fora bucles = %s",buffer);
 
 //fi copia
 	PQexec(conexion,buffer);
-	printf("registre borrat ???? comprobar-ho!!");
-	printf("\n\nbuffer = %s",buffer);
+	if(DEBUG){
+		printf("registre borrat ???? comprobar-ho!!");
+		printf("\n\nbuffer = %s",buffer);
+	}
         PQfinish(conexion);
 }
 
@@ -564,7 +573,7 @@ int menuc(char tria) //menu de consulta 2
                                 NULL,//Opciones adicionales
                                 NULL, // Fichero o terminal de la salida
                                 "agenda",//Nombre de la base de datos
-                                "postgres", // Nombre de usuario
+                                "marc", // Nombre de usuario
                                 "Datsxku1!"); // PASSWORD del usuario
         if (PQstatus(conexion) == CONNECTION_BAD) {
                 printf("\n Error en la conexió a la base de dades de l'agenda ! ");
