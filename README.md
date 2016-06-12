@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/Xevib/agenda.svg?branch=master)](https://travis-ci.org/Xevib/agenda)
 # agenda
 writed using c and postgresql database version 1
 ########################################
