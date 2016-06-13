@@ -10,7 +10,8 @@ PATH_FUNCIONS=funcions
 FUNCIONS=funcions
 GRAFIC=pkg-config --cflags --libs elementary evas ecore ecore-evas eina ecore-x
 
-all:funcio consola grafic 
+all:funcio consola 
+#grafic 
 
 grafic:grafic
 	$(CC) -o $(TARGET_GRAFIC) $(INCLUDES) $(LIBS) $(CFLAGS) $(TARGET_GRAFIC).c $(FUNCIONS).o `$(GRAFIC)`
