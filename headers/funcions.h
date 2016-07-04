@@ -14,7 +14,7 @@
 //  WHERE producer_id = producers.id AND producers.name = 'foo';
 #define DELETEN "DELETE FROM notes WHERE id_cites=" //"DELETE FROM notes where id="
 #define SELECTN "SELECT * FROM notes"
-#define SELECTT "SELECT * FROM Telefons"
+#define SELECTT "SELECT * FROM Telefons WHERE "
 #define INSERTT "INSERT INTO telefons (id_telefons, nom_telefons, cognom1_telefons, cognom2_telefons, correu_telefons, telefon_casa, telefon_mobil, telefon_2_mobil, altres_telefons) VALUES (nextval('id_seq_telefons'::regclass),"
 #define DELETET "DELETE FROM Telefons WHERE id_telefons="
 
