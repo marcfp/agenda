@@ -37,4 +37,14 @@ Added graphical interface using Enlightenment Foundation Libraries.
 for build it :
 type  "make grafic" into term.
 
+For install EFL in 
+- debian :
+https://packages.debian.org/jessie/e17
+- Ubuntu :
+https://help.ubuntu.com/community/Enlightenment
+-freeBSD :
+https://phab.enlightenment.org/w/installation_freebsd/
+-openBSD :
+https://phab.enlightenment.org/w/openbsd/
+-etc ...
 
