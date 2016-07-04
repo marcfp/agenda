@@ -33,3 +33,8 @@ tlf_mobil, numeric(9,0)
 tlf_mobil_2, numeric(9,0)
 altres, text
 #######################################
+Added graphical interface using Enlightenment Foundation Libraries.
+for build it :
+type  "make grafic" into term.
+
+
