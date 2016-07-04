@@ -44,7 +44,9 @@ https://packages.debian.org/jessie/e17
 https://help.ubuntu.com/community/Enlightenment
 -freeBSD :
 https://phab.enlightenment.org/w/installation_freebsd/
+
 -openBSD :
 https://phab.enlightenment.org/w/openbsd/
+
 -etc ...
 
