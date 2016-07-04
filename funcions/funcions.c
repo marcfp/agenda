@@ -1,13 +1,20 @@
 #include <stdio.h>
 #include <wchar.h>
 #include <string.h>
-#include "../headers/funcions.h"  /* Include the header (not strictly necessary here) */
+#include "funcions.h"  /* Include the header (not strictly necessary here) */
 
+
+#define INSERTT "INSERT INTO telefons (id_telefons, nom_telefons, cognom1_telefons, cognom2_telefons, correu_telefons, telefon_casa, telefon_mobil, telefon_2_mobil, altres_telefons) VALUES (nextval('id_seq_telefons'::regclass),'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s') ;"
 
 int foo(int x)    /* Function definition */
 {
     return x + 5;
 }
+
+
+
+
+
 void mostra_telefon(wchar_t *cadena)
 {
 	int longitud,i;
@@ -253,5 +260,96 @@ int valida_telefon(wchar_t *telefon)
 		
 	}
 	
+}
+
+
+int comproba_mail(char *camp)
+{
+	int arroba;
+	int punt;
+	int pos=-1;
+	int i=0;
+	int existeix=-1;
+	int allargada = strlen(camp);
+	int trobat=0;
+	int punt_trobat=0;
+	int pos_arroba=0;
+	int mail=-1;
+	arroba=64;
+	punt=46;
+
+	for (i=0;i<allargada;i++)
+		{
+			printf("\ncamp[%d]=%c", i, camp);
+			if(camp[i]==arroba && i >1) { 
+							trobat=1;
+							pos_arroba=i;
+							mail=0;
+							}
+			if(camp[i]==punt && i>=pos_arroba+2 ) {
+							printf("\n\npunt trobat a %d = %c", i, camp[i]);
+							punt_trobat=i;
+							mail=1;
+							}
+		}
+
+	printf("\t\ttorbat = %d, pos_arroba=%d, punt_trobat=%d",trobat,pos_arroba,punt_trobat);
+
+	if (trobat!=0)	{
+//	if (trobat==1) 
+		printf("\nConté arroba");
+		if(punt_trobat!=0){
+				printf("\nAQUEST CORREU CONTÉ ARROBA I PUNT BEN POSICIONAT");
+				return(1);
+				}
+		else {
+			printf(" no conté punt ben posicionat?");
+			return(0);
+			}
+	}
+	else printf("\nNo la conté!!!!!");
+	printf("\ncamp =%s \n comproba mail",camp);
+	return (0);
+}
+int comproba_ultim(char txt[])
+{
+	printf("\n\n\n txt ultim telefon = %s allargada =%d\n\n\n",txt, strlen(txt));
+	int bo=0;
+	int i,j, lletra=0;
+	char *str2 = "Altres telèfons";
+	j = strncmp(txt, str2, 15);
+	printf("\ntercer telefon bo = %d\n i = %d",bo, i);
+	for (i=0; i<strlen(txt);i++){
+		if(txt[i]<'0' || txt[i]>'9'){
+			bo++;
+			lletra=1;
+		}
+	}
+
+	if ((j!=0 || bo!=strlen(txt)) && lletra==0) {
+		printf("alguna cosa diferent hi ha");
+		return(0);
+	}
+	else{
+		printf("mostrar missatge que revisi telefons");
+		return (1);
+	}
+}
+
+int comproba_telefons(char txt[])
+{
+	int num_error=0;
+	int i;
+	int maxim=strlen(txt);
+	int valor=0;
+	if (maxim <9 || maxim> 9) valor=1;
+	else{
+		for(i=0;i<maxim;i++){
+			if(txt[i]<'0' || txt[i]>'9') valor=1;
+		}
+	}
+	if(DEBUG==1)printf("\nvalor = %d", valor);
+	return valor;
+
 }
 
