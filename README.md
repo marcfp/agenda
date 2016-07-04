@@ -42,11 +42,9 @@ For install EFL in
 https://packages.debian.org/jessie/e17
 - Ubuntu :
 https://help.ubuntu.com/community/Enlightenment
--freeBSD :
+- freeBSD :
 https://phab.enlightenment.org/w/installation_freebsd/
-
--openBSD :
+- openBSD :
 https://phab.enlightenment.org/w/openbsd/
-
--etc ...
+- etc ...
 
