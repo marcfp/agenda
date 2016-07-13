@@ -1678,9 +1678,9 @@ Evas_Object *target;//animation object
 /*translatable*/
 	setlocale (LC_ALL, "");
 
-//	bindtextdomain (PACKAGE, LOCALEDIR);
+	bindtextdomain ("agenda", "/usr/share/locale");
 
-//	textdomain (PACKAGE);
+	textdomain ("agenda");
 /*fi translatable*/
 
 
