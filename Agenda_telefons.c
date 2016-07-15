@@ -692,7 +692,7 @@ int main ()
 					  if (DEBUG){
 						  printf ("L'opció escollida és: '%s'\n", cadena);
 						  opcio=(int)cadena[0];
-						  printf("\nHas escollit l'opcio %d \n",opcio);
+						  printf("\nHas escollit l'opcio %c \n",cadena[0]);
 						}
 		
 				  	  switch(opcio)
