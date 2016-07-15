@@ -4,7 +4,7 @@
 
 This program uses Enlightenment Foundation Libraries.
 For use it, you must have installed these packages :
-apt-get install libecore-evas1 libevas-dev libevas-loaders libevas1 libevas1-engines-x libecore-con1 libecore-dev libecore-evas1 libecore-fb1 libecore-file1 libecore-imf1 libecore-input1 libecore-ipc1 libecore-x1 libecore1 libedbus1 libedje-bin libedje1 libeet1 libeeze1 libefreet-bin libefreet1 libefreet1a  libeina1 libeio1 libevas1 libevas1-engine-software-x11 libpam0g libxcb-keysyms1 libxcb-shape0 libxcb1  
+apt-get install libecore-evas1 libevas-dev libevas-loaders libevas1 libevas1-engines-x libecore-con1 libecore-dev libecore-evas1 libecore-fb1 libecore-file1 libecore-imf1 libecore-input1 libecore-ipc1 libecore-x1 libecore1 libedbus1 libedje-bin libedje1 libeet1 libeeze1 libefreet-bin libefreet1 libefreet1a  libeina1 libeio1 libevas1  libpam0g libxcb-keysyms1 libxcb-shape0  libelementary-dev
 # agenda
 writed using c and postgresql database version 1
 ########################################
