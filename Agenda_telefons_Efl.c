@@ -176,13 +176,7 @@ _on_delete_eina(Ecore_Evas *ee)
    ecore_main_loop_quit();
 }
 
-static void
-carrega_nom(void *data, Evas_Object *obj, void *event_info)
-{
-	Evas_Object *en;
-	en = (Evas_Object *) obj;
-if(DEBUG==1) printf("\ncarrega text ?\n");
-}
+
 static void
 neteja_text(void *data, Evas_Object *obj, void *event_info EINA_UNUSED)
 {
@@ -298,7 +292,7 @@ Eina_Bool value;
 
 
    gd = elm_grid_add(win);
-//   elm_grid_size_set(gd, 100, 100);
+
    evas_object_size_hint_min_set(gd, 700 * elm_config_scale_get(), 550 * elm_config_scale_get()); //mida més petita
    evas_object_size_hint_weight_set(gd, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
    elm_win_resize_object_add(win, gd);
@@ -311,36 +305,6 @@ Eina_Bool value;
    elm_grid_pack(gd, bg, 5, 5, 45, 45);
    evas_object_show(bg);
 
-Evas_Object *rect1, *hoversel, *btn = NULL;
-   rect1 = evas_object_rectangle_add(evas_object_evas_get(win));
-   evas_object_color_set(rect1, 2, 0, 0, 2);
-   evas_object_show(rect1);
-   hoversel = elm_hoversel_add(win);
-   elm_hoversel_hover_parent_set(hoversel, win);
-   elm_hoversel_horizontal_set(hoversel, EINA_FALSE);
-   elm_object_text_set(hoversel, "Mostra Registre");
-   evas_object_smart_callback_add(hoversel, "clicked", carrega_registres,en );
-// evas_object_smart_callback_add(hoversel, "clicked", cerca_bt_clicked, NULL);
-// evas_object_smart_callback_add(bt, "clicked", cerca_bt_clicked, en);
-
-
-
-  evas_object_smart_callback_add(hoversel,"" , NULL , NULL );//"clicked", registre, entra); //és la línea bona
-   elm_grid_pack(gd, hoversel, 62, 2, 38, 2);
-
-   evas_object_show(hoversel);
-
-
-
-/*check_nom = elm_check_add(win);
-elm_object_text_set(check_nom, "Forçar Nom");
-//elm_check_state_pointer_set(check_nom, &value);
-elm_check_state_set(check_nom,0);
-////evas_object_smart_callback_add(check_nom, "changed", _print, &value);
-elm_grid_pack(gd, check_nom, 40, 8, 8, 5);
-evas_object_resize( check_nom, 200, 30);
-evas_object_show( check_nom);
-*/
    en_nomt = elm_entry_add(win); //nom
    elm_entry_scrollable_set(en_nomt, EINA_FALSE);
    evas_object_size_hint_weight_set(en_nomt, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
@@ -355,16 +319,7 @@ evas_object_show( check_nom);
    elm_object_text_set(en_nom, "Escriu el nom aquí");
    evas_object_show(en_nom);
    elm_grid_pack(gd, en_nom, 15, 8, 25, 5);
-/*
-check_cog1= elm_check_add(win);
-elm_object_text_set(check_cog1, "Forçar 1r Cog.");
-elm_check_state_set(check_cog1,0);
-//elm_check_state_pointer_set(check_cog1, &value);
-//evas_object_smart_callback_add(check_cog1, "changed", _print, &value);
-elm_grid_pack(gd, check_cog1, 40, 13, 8, 5);
-evas_object_resize( check_cog1, 200, 30);
-evas_object_show( check_cog1);
-*/
+
    en_cog1t = elm_entry_add(win); //COG1	
    elm_entry_scrollable_set(en_cog1t, EINA_FALSE);
    evas_object_size_hint_weight_set(en_cog1t, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
@@ -379,16 +334,7 @@ evas_object_show( check_cog1);
    elm_object_text_set(en_cog1, "Escriu el primer cognom aquí");
    evas_object_show(en_cog1);
    elm_grid_pack(gd, en_cog1, 15, 13, 25, 5);
-/*
-check_cog2 = elm_check_add(win);
-elm_object_text_set(check_cog2, "Forçar 2n Cog.");
-elm_check_state_set(check_cog2,0);
-//elm_check_state_pointer_set(check_cog2, &value);
-//evas_object_smart_callback_add(check_cog2, "changed", _print, &value);
-elm_grid_pack(gd, check_cog2, 40,18,8,5);
-evas_object_resize(check_cog2, 200,30);
-evas_object_show(check_cog2);
-*/
+
    en_cog2t = elm_entry_add(win); //COG2	
    elm_entry_scrollable_set(en_cog2t, EINA_FALSE);
    evas_object_size_hint_weight_set(en_cog2t, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
@@ -404,16 +350,6 @@ evas_object_show(check_cog2);
    evas_object_show(en_cog2);
    elm_grid_pack(gd, en_cog2, 15, 18, 25, 5);
 
-/*
-check_mail = elm_check_add(win);
-elm_object_text_set(check_mail, "Forçar Mail");
-elm_check_state_set(check_mail,0);
-//elm_check_state_pointer_set(check_mail, &value);
-//evas_object_smart_callback_add(check_mail, "changed", _print, &value);
-elm_grid_pack(gd, check_mail, 40,23,8,5);
-evas_object_resize(check_mail, 200,30);
-evas_object_show(check_mail);
-*/
    en_mailt = elm_entry_add(win); //correu	
    elm_entry_scrollable_set(en_mailt, EINA_FALSE);
    evas_object_size_hint_weight_set(en_mailt, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
@@ -429,16 +365,6 @@ evas_object_show(check_mail);
    evas_object_show(en_mail);
    elm_grid_pack(gd, en_mail, 15, 23, 25, 5);
 
-/*
-check_casat = elm_check_add(win);
-elm_object_text_set(check_casat, "Forçar 1r Tlfn ");
-elm_check_state_set(check_casat,0);
-//elm_check_state_pointer_set(check_casat, &value);
-// evas_object_smart_callback_add(check_casat, "changed", _print, &value);
-elm_grid_pack(gd, check_casat, 40,28,8,5);
-evas_object_resize(check_casat, 200,30);
-evas_object_show(check_casat);
-*/
    en_tlf_casat = elm_entry_add(win); //TELEFON1	
    evas_object_size_hint_weight_set(en_tlf_casat, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
    evas_object_size_hint_align_set(en_tlf_casat, EVAS_HINT_FILL, EVAS_HINT_FILL);
@@ -453,16 +379,6 @@ evas_object_show(check_casat);
    evas_object_show(en_tlf_casa);
    elm_grid_pack(gd, en_tlf_casa, 15, 28, 25, 5);
 
-/*
-check_mobil1t = elm_check_add(win);
-elm_object_text_set(check_mobil1t, "Forçar 2n Tlfn ");
-//elm_check_state_pointer_set(check_mobil1t, &value);
-elm_check_state_set(check_mobil1t, 0);
-//evas_object_smart_callback_add(check_mobil1t, "changed", _print, &value);
-elm_grid_pack(gd, check_mobil1t, 40,33,8,5);
-evas_object_resize(check_mobil1t, 200,30);
-evas_object_show(check_mobil1t);
-*/
    en_tlf_mobil1t = elm_entry_add(win); //MOVIL	
    elm_entry_scrollable_set(en_tlf_mobil1t, EINA_FALSE);
    evas_object_size_hint_weight_set(en_tlf_mobil1t, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
@@ -478,16 +394,6 @@ evas_object_show(check_mobil1t);
    evas_object_show(en_tlf_mobil1);
    elm_grid_pack(gd, en_tlf_mobil1, 15, 33, 25, 5);
 
-/*
-check_tlf_altres = elm_check_add(win);
-elm_object_text_set(check_tlf_altres, "Forçar + tlf. ");
-elm_check_state_set(check_tlf_altres, 0); //0 desactivat, 1 pitjat
-//elm_check_state_pointer_set(check_tlf_altres, &value);
-//evas_object_smart_callback_add(check_tlf_altres, "changed", _print, &value);
-elm_grid_pack(gd, check_tlf_altres, 40,38,8,5);
-evas_object_resize(check_tlf_altres, 200,30);
-evas_object_show(check_tlf_altres);
-*/
    en_tlf_altrest = elm_entry_add(win); //MOVIL2	
    elm_entry_scrollable_set(en_tlf_altrest, EINA_FALSE);
    evas_object_size_hint_weight_set(en_tlf_altrest, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
@@ -503,15 +409,6 @@ evas_object_show(check_tlf_altres);
    evas_object_show(en_tlf_altres);
    elm_grid_pack(gd, en_tlf_altres, 15, 38, 25, 5);
 
-/*
-check_altres = elm_check_add(win);
-elm_object_text_set(check_altres, "Forçar Altres");
-elm_check_state_set(check_altres, 0); //0 desactivat, 1 pitjat
-//printf("\nelm_check_state_get(check_altres) = %d \n",elm_check_state_get(check_altres)); //recull 0 desactivat, 1 activat
-elm_grid_pack(gd, check_altres, 40,43,8,5);
-evas_object_resize(check_altres, 200,30);
-evas_object_show(check_altres);
-*/
    en_altrest = elm_entry_add(win); //ALTRES
    elm_entry_scrollable_set(en_altrest, EINA_FALSE);
    evas_object_size_hint_weight_set(en_altrest, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
@@ -528,7 +425,44 @@ en_altres = elm_entry_add(win);
    evas_object_show(en_altres);
    elm_grid_pack(gd, en_altres, 15, 43, 25, 5);
 
-  // printf("\nelm_check_state_get\n(check_nom)=%s\n",elm_check_state_get(check_nom));
+
+
+Evas_Object *rect1, *hoversel, *btn = NULL;
+   rect1 = evas_object_rectangle_add(evas_object_evas_get(win));
+   evas_object_color_set(rect1, 2, 0, 0, 2);
+   evas_object_show(rect1);
+   hoversel = elm_hoversel_add(win);
+   elm_hoversel_hover_parent_set(hoversel, win);
+   elm_hoversel_horizontal_set(hoversel, EINA_FALSE);
+   elm_object_text_set(hoversel, "Mostra Registre");
+evas_object_data_set(hoversel, "lb1", en_nom); //carreguem les dades al butó ...
+   evas_object_data_set(hoversel, "lb2", en_cog1);//carreguem les dades al butó ...
+   evas_object_data_set(hoversel, "lb3", en_cog2);//carreguem les dades al butó ...
+   evas_object_data_set(hoversel, "lb4", en_mail);//carreguem les dades al butó ...
+   evas_object_data_set(hoversel, "lb5", en_tlf_casa);//carreguem les dades al butó ...
+   evas_object_data_set(hoversel, "lb6", en_tlf_mobil1);//carreguem les dades al butó ...
+   evas_object_data_set(hoversel, "lb7", en_tlf_altres);//carreguem les dades al butó ...
+   evas_object_data_set(hoversel, "lb8", en_altres);//carreguem les dades al butó ...
+   evas_object_smart_callback_add(hoversel, "clicked", carrega_registres,en );
+// evas_object_smart_callback_add(hoversel, "clicked", cerca_bt_clicked, NULL);
+// evas_object_smart_callback_add(bt, "clicked", cerca_bt_clicked, en);
+/*
+https://www.enlightenment.org/program_guide/event_effect/ecore_events
+https://www.enlightenment.org/program_guide/main_loop/threads?s[]=ecore
+https://docs.enlightenment.org/api/ecore/doc/html/
+*/
+
+
+
+  evas_object_smart_callback_add(hoversel,"" , NULL , NULL );//"clicked", registre, entra); //és la línea bona
+   elm_grid_pack(gd, hoversel, 62, 2, 38, 2);
+
+   evas_object_show(hoversel);
+
+
+
+
+    if(DEBUG==1) printf("\nelm_check_state_get\n(check_nom)=%s\n",elm_check_state_get(check_nom));
    bt = elm_button_add(win);
    elm_object_text_set(bt, "Cerca");
    elm_grid_pack(gd, bt, 10,70,15,5);
@@ -587,58 +521,6 @@ _transit_check(Elm_Transit *trans)
 }
 
 
-static struct {
-
-     const char *label;
-
-     void (*transition_add_cb)(Elm_Transit *);
-
-     Eina_Bool checked;
-
-} _transitions[9] = { /* ESTRUCTURA CAMPS A BUSCAR*/
-	{ 
-	"nom", _transit_check, EINA_FALSE
-	},
-	{ 
-	"cognom1", _transit_check, EINA_FALSE
-	},
-	{ 
-	"cognom2", _transit_check, EINA_FALSE
-	},	
-	{ 
-	"correu", _transit_check, EINA_FALSE
-	},	
-	{ 
-	"telefon casa", _transit_check, EINA_FALSE
-	},
-	{ 
-	"telefon movil", _transit_check, EINA_FALSE
-	},
-	{ 
-	"telefon movil2", _transit_check, EINA_FALSE
-	},
-	{ 
-	"altres", _transit_check, EINA_FALSE
-	},
-{ NULL, NULL, EINA_FALSE }
-	/*_transitions[] = {
-
-       { "Flip", _transit_flip, EINA_FALSE },
-
-       { "Blend", _transit_blend, EINA_FALSE },
-
-       { "Fade", _transit_fade, EINA_FALSE },
-
-       { "Resizable Flip", _transit_resizable_flip, EINA_FALSE },
-
-       { NULL, NULL, EINA_FALSE }*/
-
-};
-
-
-
-
-
 
 static void
 cerca_bt_clicked(void *data, Evas_Object *obj, void *event_info)
@@ -647,7 +529,7 @@ Evas_Object *win, *popup, *content;
 Evas_Object *bt_torna;
 int ALT=200;
 int AMPLA=200;
-const char *nom, *cog1, *cog2, *mail, *tlf_casa, *tlf_mobil, *tlf_altres, *altres, cerca[16384];
+const char *nom, *cog1, *cog2, *mail, *tlf_casa, *tlf_mobil, *tlf_altres, *altres, cerca[16384], *hoversel_cerca;
  int chnom, chcog1, chcog2, chmail, chcasat, chmobil1t, chtlf_altres, chaltres; 
 //*en_nom, *en_cog1, *en_cog2, *en_mail, *en_tlf_casa, *en_tlf_mobil1, *en_tlf_altres, *en_altres,
 
@@ -682,17 +564,9 @@ if(DEBUG==1)	printf("\naquí cercaré ...\n");
 	altres = elm_object_text_get(evas_object_data_get(obj, "lb8"));
 	
 
-	chnom = elm_check_state_get(evas_object_data_get(obj, "lb9"));
-	chcog1 = elm_check_state_get(evas_object_data_get(obj, "lb10"));
-	chcog2 = elm_check_state_get(evas_object_data_get(obj, "lb11"));
-	chmail = elm_check_state_get(evas_object_data_get(obj, "lb12"));
-	chcasat = elm_check_state_get(evas_object_data_get(obj, "lb13"));
-	chmobil1t = elm_check_state_get(evas_object_data_get(obj, "lb14"));
-	chtlf_altres = elm_check_state_get(evas_object_data_get(obj, "lb15"));
-	chaltres = elm_check_state_get(evas_object_data_get(obj, "lb16"));
+       	
 
-
-	if(DEBUG==1)printf("\nchnom = %d\n \nchcog1 = %d\n \nchcog2 = %d\n \nchmail = %d\n \nchcasat = %d\n \nchmobil1t = %d\n \nchtlf_altres = %d\n  \nchaltres = %d\n",chnom,chcog1, chcog2, chmail, chcasat, chmobil1t, chtlf_altres, chaltres);
+	if(DEBUG==1)printf("\n nom=%s\n cog1=%s\n cog2=%s\n mail=%s\n tlf_casa=%s\n tlf_mobil=%s\n tlf_altres=%s\n altres=%s\n",nom, cog1, cog2, mail, tlf_casa, tlf_mobil, tlf_altres, altres);
 
 //nom
 	if(strcmp(nom,"Escriu el nom que vulguis cercar")==0) {
@@ -892,52 +766,10 @@ if(DEBUG==1)	printf("\naquí cercaré ...\n");
 			}
 	}
 	printf("\nnúmero de camps = %d\n número de files %d\n",nFields, nRows);
-/* si existeix : ensenyaro */
-	/* EVAS_OBJECT_TEXT_SET DE LA CAIXA, ENSENYAR-LA I CARREGAR-HO DINS, PER DIR ALGUNA COSA ?'*/
-/* si no existeix, mostrar missatge i deixar tornar enrera(soritr) o tornar a cercar*/
-	/* EVAS_OBJECT_TEXT_SET AMB MISSATGE DE QUÈ NO EXISTEIX EL QUE ES BUSCA A DINS LA CAIXA, ENSENYAR-LA, PER DIR ALGUNA COSA ?'*/
-   win = elm_win_util_standard_add("popup", "Popup");
-   elm_win_autodel_set(win, EINA_TRUE);
-   elm_policy_set(ELM_POLICY_QUIT, ELM_POLICY_QUIT_LAST_WINDOW_CLOSED);
-   content = elm_label_add(win);
 
-   elm_object_text_set(content, "<align=center>Camp a cercar </align>");
-   popup = elm_popup_add(win);
-   elm_popup_timeout_set(popup, 3.0);
-   evas_object_smart_callback_add(popup, "timeout", _timeout, NULL);
-   
-   elm_object_content_set(popup, content);
-   
-   elm_object_part_text_set(popup, "title,text", "Has cercat ?");
-   evas_object_show(popup);
-
-
-
-   bt_torna = elm_button_add(win);
-elm_object_text_set(bt_torna, "Torna");
-evas_object_smart_callback_add(bt_torna, "clicked",_torna, win);
-
-evas_object_resize(bt_torna, 100, 60);
-evas_object_move(bt_torna, (ALT/2)-50, (7*AMPLA/8)-40);
-// elm_grid_pack(gd, bt_torna, 70,80,15,15);
-evas_object_show(bt_torna);
-
-   evas_object_smart_callback_add(popup, "block,clicked", _block_clicked, NULL);
-
-   evas_object_smart_callback_add(win, "block,clicked", _block_clicked, NULL);
-   evas_object_resize(win, ALT, AMPLA);
-   evas_object_show(win);
 }
 
 
-
-/*static void
-_print(void *data, Evas_Object *obj, void *event_info)
-{
-
-   printf("\ncheck %smarked\n", *((Eina_Bool*)data) ? "" : "un");
-}
-*/
 
 
 static void
@@ -955,7 +787,7 @@ http://www.cybertec.at/2015/02/postgresql-9-4-aggregation-filters-they-do-pay-of
 
 
 */
-Evas_Object *win, *gd, *bg, *en, *tg, *lb, *sp, *check_nom, *en_nomt, *en_nom, *check_cog1, *en_cog1t, *en_cog1, *check_cog2, *en_cog2t, *en_cog2, *check_mail, *en_mailt, *en_mail,  *check_casat, *en_tlf_casat, *en_tlf_casa, *check_mobil1t, *en_tlf_mobil1t, *en_tlf_mobil1, *check_tlf_altres, *en_tlf_altrest, *en_tlf_altres,  *check_altres, *en_altrest, *en_altres;
+Evas_Object *win, *gd, *bg, *en, *tg, *lb, *sp, *en_nomt, *en_nom, *en_cog1t, *en_cog1, *en_cog2t, *en_cog2, *en_mailt, *en_mail,   *en_tlf_casat, *en_tlf_casa,  *en_tlf_mobil1t, *en_tlf_mobil1,  *en_tlf_altrest, *en_tlf_altres,   *en_altrest, *en_altres;
    Evas_Object *bt, *en2;
    Evas_Object *bt_torna;
 
@@ -975,7 +807,7 @@ Eina_Bool value;
 
 
    gd = elm_grid_add(win);
-//   elm_grid_size_set(gd, 100, 100);
+
    evas_object_size_hint_min_set(gd, 700 * elm_config_scale_get(), 550 * elm_config_scale_get()); //mida més petita
    evas_object_size_hint_weight_set(gd, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
    elm_win_resize_object_add(win, gd);
@@ -988,35 +820,6 @@ Eina_Bool value;
    elm_grid_pack(gd, bg, 5, 5, 45, 45);
    evas_object_show(bg);
 
-Evas_Object *rect1, *hoversel, *btn = NULL;
-   rect1 = evas_object_rectangle_add(evas_object_evas_get(win));
-   evas_object_color_set(rect1, 2, 0, 0, 2);
-   evas_object_show(rect1);
-   hoversel = elm_hoversel_add(win);
-   elm_hoversel_hover_parent_set(hoversel, win);
-   elm_hoversel_horizontal_set(hoversel, EINA_FALSE);
-   elm_object_text_set(hoversel, "Mostra Registre");
-   evas_object_smart_callback_add(hoversel, "clicked", carrega_registres,en );
-// evas_object_smart_callback_add(hoversel, "clicked", cerca_bt_clicked, NULL);
-// evas_object_smart_callback_add(bt, "clicked", cerca_bt_clicked, en);
-
-
-
-   evas_object_smart_callback_add(hoversel,"" , NULL , NULL );//"clicked", registre, entra); //és la línea bona
-   elm_grid_pack(gd, hoversel, 62, 2, 38, 2);
-
-   evas_object_show(hoversel);
-
-
-
-check_nom = elm_check_add(win);
-elm_object_text_set(check_nom, "Forçar Nom");
-//elm_check_state_pointer_set(check_nom, &value);
-elm_check_state_set(check_nom,0);
-////evas_object_smart_callback_add(check_nom, "changed", _print, &value);
-elm_grid_pack(gd, check_nom, 40, 8, 8, 5);
-evas_object_resize( check_nom, 200, 30);
-evas_object_show( check_nom);
 
    en_nomt = elm_entry_add(win); //nom
    elm_entry_scrollable_set(en_nomt, EINA_FALSE);
@@ -1033,14 +836,6 @@ evas_object_show( check_nom);
    evas_object_show(en_nom);
    elm_grid_pack(gd, en_nom, 15, 8, 25, 5);
 
-check_cog1= elm_check_add(win);
-elm_object_text_set(check_cog1, "Forçar 1r Cog.");
-elm_check_state_set(check_cog1,0);
-//elm_check_state_pointer_set(check_cog1, &value);
-//evas_object_smart_callback_add(check_cog1, "changed", _print, &value);
-elm_grid_pack(gd, check_cog1, 40, 13, 8, 5);
-evas_object_resize( check_cog1, 200, 30);
-evas_object_show( check_cog1);
 
    en_cog1t = elm_entry_add(win); //COG1	
    elm_entry_scrollable_set(en_cog1t, EINA_FALSE);
@@ -1057,14 +852,6 @@ evas_object_show( check_cog1);
    evas_object_show(en_cog1);
    elm_grid_pack(gd, en_cog1, 15, 13, 25, 5);
 
-check_cog2 = elm_check_add(win);
-elm_object_text_set(check_cog2, "Forçar 2n Cog.");
-elm_check_state_set(check_cog2,0);
-//elm_check_state_pointer_set(check_cog2, &value);
-//evas_object_smart_callback_add(check_cog2, "changed", _print, &value);
-elm_grid_pack(gd, check_cog2, 40,18,8,5);
-evas_object_resize(check_cog2, 200,30);
-evas_object_show(check_cog2);
 
    en_cog2t = elm_entry_add(win); //COG2	
    elm_entry_scrollable_set(en_cog2t, EINA_FALSE);
@@ -1082,15 +869,6 @@ evas_object_show(check_cog2);
    elm_grid_pack(gd, en_cog2, 15, 18, 25, 5);
 
 
-check_mail = elm_check_add(win);
-elm_object_text_set(check_mail, "Forçar Mail");
-elm_check_state_set(check_mail,0);
-//elm_check_state_pointer_set(check_mail, &value);
-//evas_object_smart_callback_add(check_mail, "changed", _print, &value);
-elm_grid_pack(gd, check_mail, 40,23,8,5);
-evas_object_resize(check_mail, 200,30);
-evas_object_show(check_mail);
-
    en_mailt = elm_entry_add(win); //correu	
    elm_entry_scrollable_set(en_mailt, EINA_FALSE);
    evas_object_size_hint_weight_set(en_mailt, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
@@ -1107,15 +885,6 @@ evas_object_show(check_mail);
    elm_grid_pack(gd, en_mail, 15, 23, 25, 5);
 
 
-check_casat = elm_check_add(win);
-elm_object_text_set(check_casat, "Forçar 1r Tlfn ");
-elm_check_state_set(check_casat,0);
-//elm_check_state_pointer_set(check_casat, &value);
-// evas_object_smart_callback_add(check_casat, "changed", _print, &value);
-elm_grid_pack(gd, check_casat, 40,28,8,5);
-evas_object_resize(check_casat, 200,30);
-evas_object_show(check_casat);
-
    en_tlf_casat = elm_entry_add(win); //TELEFON1	
    evas_object_size_hint_weight_set(en_tlf_casat, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
    evas_object_size_hint_align_set(en_tlf_casat, EVAS_HINT_FILL, EVAS_HINT_FILL);
@@ -1130,15 +899,6 @@ evas_object_show(check_casat);
    evas_object_show(en_tlf_casa);
    elm_grid_pack(gd, en_tlf_casa, 15, 28, 25, 5);
 
-
-check_mobil1t = elm_check_add(win);
-elm_object_text_set(check_mobil1t, "Forçar 2n Tlfn ");
-//elm_check_state_pointer_set(check_mobil1t, &value);
-elm_check_state_set(check_mobil1t, 0);
-//evas_object_smart_callback_add(check_mobil1t, "changed", _print, &value);
-elm_grid_pack(gd, check_mobil1t, 40,33,8,5);
-evas_object_resize(check_mobil1t, 200,30);
-evas_object_show(check_mobil1t);
 
    en_tlf_mobil1t = elm_entry_add(win); //MOVIL	
    elm_entry_scrollable_set(en_tlf_mobil1t, EINA_FALSE);
@@ -1156,15 +916,6 @@ evas_object_show(check_mobil1t);
    elm_grid_pack(gd, en_tlf_mobil1, 15, 33, 25, 5);
 
 
-check_tlf_altres = elm_check_add(win);
-elm_object_text_set(check_tlf_altres, "Forçar + tlf. ");
-elm_check_state_set(check_tlf_altres, 0); //0 desactivat, 1 pitjat
-//elm_check_state_pointer_set(check_tlf_altres, &value);
-//evas_object_smart_callback_add(check_tlf_altres, "changed", _print, &value);
-elm_grid_pack(gd, check_tlf_altres, 40,38,8,5);
-evas_object_resize(check_tlf_altres, 200,30);
-evas_object_show(check_tlf_altres);
-
    en_tlf_altrest = elm_entry_add(win); //MOVIL2	
    elm_entry_scrollable_set(en_tlf_altrest, EINA_FALSE);
    evas_object_size_hint_weight_set(en_tlf_altrest, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
@@ -1180,14 +931,6 @@ evas_object_show(check_tlf_altres);
    evas_object_show(en_tlf_altres);
    elm_grid_pack(gd, en_tlf_altres, 15, 38, 25, 5);
 
-
-check_altres = elm_check_add(win);
-elm_object_text_set(check_altres, "Forçar Altres");
-elm_check_state_set(check_altres, 0); //0 desactivat, 1 pitjat
-//printf("\nelm_check_state_get(check_altres) = %d \n",elm_check_state_get(check_altres)); //recull 0 desactivat, 1 activat
-elm_grid_pack(gd, check_altres, 40,43,8,5);
-evas_object_resize(check_altres, 200,30);
-evas_object_show(check_altres);
 
    en_altrest = elm_entry_add(win); //ALTRES
    elm_entry_scrollable_set(en_altrest, EINA_FALSE);
@@ -1205,6 +948,33 @@ en_altres = elm_entry_add(win);
    evas_object_show(en_altres);
    elm_grid_pack(gd, en_altres, 15, 43, 25, 5);
 
+
+
+Evas_Object *rect1, *hoversel, *btn = NULL;
+   rect1 = evas_object_rectangle_add(evas_object_evas_get(win));
+   evas_object_color_set(rect1, 2, 0, 0, 2);
+   evas_object_show(rect1);
+   hoversel = elm_hoversel_add(win);
+   elm_hoversel_hover_parent_set(hoversel, win);
+   elm_hoversel_horizontal_set(hoversel, EINA_FALSE);
+   elm_object_text_set(hoversel, "Mostra Registre");
+   evas_object_data_set(hoversel, "lb1", en_nom); //carreguem les dades al butó ...
+   evas_object_data_set(hoversel, "lb2", en_cog1);//carreguem les dades al butó ...
+   evas_object_data_set(hoversel, "lb3", en_cog2);//carreguem les dades al butó ...
+   evas_object_data_set(hoversel, "lb4", en_mail);//carreguem les dades al butó ...
+   evas_object_data_set(hoversel, "lb5", en_tlf_casa);//carreguem les dades al butó ...
+   evas_object_data_set(hoversel, "lb6", en_tlf_mobil1);//carreguem les dades al butó ...
+   evas_object_data_set(hoversel, "lb7", en_tlf_altres);//carreguem les dades al butó ...
+   evas_object_data_set(hoversel, "lb8", en_altres);//carreguem les dades al butó ...
+   evas_object_smart_callback_add(hoversel, "clicked", carrega_registres,en );
+// evas_object_smart_callback_add(hoversel, "clicked", cerca_bt_clicked, NULL);
+// evas_object_smart_callback_add(bt, "clicked", cerca_bt_clicked, en);
+
+   evas_object_smart_callback_add(hoversel,"" , NULL , NULL );//"clicked", registre, entra); //és la línea bona
+   elm_grid_pack(gd, hoversel, 62, 2, 38, 2);
+   evas_object_show(hoversel);
+
+
   // printf("\nelm_check_state_get\n(check_nom)=%s\n",elm_check_state_get(check_nom));
    bt = elm_button_add(win);
    elm_object_text_set(bt, "Cerca");
@@ -1217,16 +987,9 @@ en_altres = elm_entry_add(win);
    evas_object_data_set(bt, "lb6", en_tlf_mobil1);//carreguem les dades al butó ...
    evas_object_data_set(bt, "lb7", en_tlf_altres);//carreguem les dades al butó ...
    evas_object_data_set(bt, "lb8", en_altres);//carreguem les dades al butó ...
-   evas_object_data_set(bt, "lb9", check_nom);//carreguem les dades al butó ...
- evas_object_data_set(bt, "lb10", check_cog1);//carreguem les dades al butó ...
-   evas_object_data_set(bt, "lb11", check_cog2);//carreguem les dades al butó ...
-   evas_object_data_set(bt, "lb13", check_casat);//carreguem les dades al butó ...
-   evas_object_data_set(bt, "lb14", check_mobil1t);//carreguem les dades al butó ...
-   evas_object_data_set(bt, "lb15", check_tlf_altres);//carreguem les dades al butó ...
-   evas_object_data_set(bt, "lb16", check_altres);//carreguem les dades al butó ...
-   
- evas_object_smart_callback_add(bt, "clicked", cerca_bt_clicked, hoversel);
-   evas_object_smart_callback_add(bt, "clicked", cerca_bt_clicked, en);
+
+   evas_object_data_set(bt, "lb8", hoversel);//carrego dades de l'hoverselal butó ?
+   evas_object_smart_callback_add(bt, "clicked", cerca_bt_clicked, hoversel);//carrega_registres, hoversel);
    evas_object_show(bt);
 
 evas_object_hide(data);
@@ -1295,7 +1058,32 @@ if(DEBUG==1)	printf("\naquí insertaré quan vegi com passar tots els valors a l
 
 	}
 	else{
-		printf("\n\n no inserto pk no són números els telefons o me'n falten ...\n\n");//mostrar missatge 
+		if(DEBUG==1)printf("\n\n no inserto pk no són números els telefons o me'n falten ...\n\n");//mostrar missatge 
+		/*FALTA mostrar finestra d'error d'inserció'*/
+Evas_Object *win,*gd, *bt_torna,*error;
+  win = elm_win_util_standard_add("error", "Error!!!");
+error = elm_entry_add(win); //nom
+gd = elm_grid_add(win);
+   elm_grid_size_set(gd, 50, 50);
+   evas_object_size_hint_weight_set(gd, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+   evas_object_size_hint_min_set(gd, 544 * elm_config_scale_get(), 374 * elm_config_scale_get());
+   elm_win_resize_object_add(win, gd);
+   evas_object_show(gd);
+   elm_entry_scrollable_set(error, EINA_TRUE);
+   evas_object_size_hint_weight_set(error, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+   evas_object_size_hint_align_set(error, EVAS_HINT_FILL, EVAS_HINT_FILL);
+   elm_object_text_set(error, "HI HA UN ERROR, REVISA-HO");
+ bt_torna = elm_button_add(win);
+elm_object_text_set(bt_torna, "Torna");
+   evas_object_show(bt_torna);
+evas_object_smart_callback_add(bt_torna, "clicked",_torna, win);
+//   evas_object_smart_callback_add(en_nom, "clicked", neteja_text, en_nom);
+elm_grid_pack(gd, error, 20, 15, 10, 18);
+elm_grid_pack(gd, bt_torna, 30, 15, 10, 16);
+
+   evas_object_show(error);
+   evas_object_show(win);
+//   elm_grid_pack(gd, en_nom, 30, 10, 30, 6);
 	}
 
 	desconecta(conexion);
@@ -1303,12 +1091,6 @@ if(DEBUG==1)	printf("\naquí insertaré quan vegi com passar tots els valors a l
 
 }
 
-static void
-//char
-restore_values(void *data, Evas_Object *obj, void *event_info)
-{
-
-}
 static void
 _afegir(void *data, Evas_Object *obj, void *event_info)
 {
@@ -1345,9 +1127,7 @@ _afegir(void *data, Evas_Object *obj, void *event_info)
    evas_object_size_hint_weight_set(en_nom, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
    evas_object_size_hint_align_set(en_nom, EVAS_HINT_FILL, EVAS_HINT_FILL);
    elm_object_text_set(en_nom, "Entra el nom");
-Evas_Object *nom=NULL;
-evas_object_smart_callback_add(en_nom, "clicked", neteja_text, en_nom);
-evas_object_smart_callback_add(nom, "clicked", carrega_nom, en_nom);
+   evas_object_smart_callback_add(en_nom, "clicked", neteja_text, en_nom);
    evas_object_show(en_nom);
    elm_grid_pack(gd, en_nom, 30, 10, 30, 6);
 
@@ -1418,7 +1198,7 @@ evas_object_smart_callback_add(nom, "clicked", carrega_nom, en_nom);
    
    elm_object_text_set(bt, "Afegir dades");
    elm_grid_pack(gd, bt, 10,70,15,5);
-// *en_nom, *en_cog1, *en_cog2, *en_mail, *en_tlf_casa, *en_tlf_mobil1, *en_tlf_altres, *en_altres,
+
    evas_object_data_set(bt, "lb1", en_nom); //carreguem les dades al butó ...
    evas_object_data_set(bt, "lb2", en_cog1);//carreguem les dades al butó ...
    evas_object_data_set(bt, "lb3", en_cog2);//carreguem les dades al butó ...
@@ -1428,9 +1208,7 @@ evas_object_smart_callback_add(nom, "clicked", carrega_nom, en_nom);
    evas_object_data_set(bt, "lb7", en_tlf_altres);//carreguem les dades al butó ...
    evas_object_data_set(bt, "lb8", en_altres);//carreguem les dades al butó ...
    evas_object_smart_callback_add(bt, "clicked", insert_bt_clicked, NULL);
-   //evas_object_smart_callback_add(bt, "clicked", insert_bt_clicked, en_nom);
-
-//evas_object_smart_callback_add(en, "clicked", conecta_en_en, en);
+  
 
      evas_object_show(bt);
 
@@ -1439,10 +1217,8 @@ elm_object_text_set(bt_torna, "Torna");
 
 evas_object_smart_callback_add(bt_torna, "clicked",_torna, win);
 evas_object_smart_callback_add(bt_torna, "clicked",_mostra_principal, data);
-//evas_object_smart_callback_Add(bt_torna, "clicked",_tanca_conexio, 
 evas_object_smart_callback_add(win, "delete,request", _main_win_del_cb,NULL);
 evas_object_resize(bt_torna, 100, 60);
-//evas_object_move(bt_torna, (WIDTH/2)-50, (7*HEIGHT/8)-40);
  elm_grid_pack(gd, bt_torna, 70,80,15,15);
 evas_object_show(bt_torna);
 
@@ -1582,6 +1358,23 @@ static void
 carrega_registres(void *data, Evas_Object *obj, void *event_info)
 {
  elm_hoversel_clear(data);
+const char *nom, *cog1, *cog2, *mail, *tlf_casa, *tlf_mobil, *tlf_altres, *altres;
+nom = elm_object_text_get(evas_object_data_get(obj, "lb1")); //passo el camp de text, no el quadre de text
+
+	cog1 = elm_object_text_get(evas_object_data_get(obj, "lb2"));
+
+	cog2 = elm_object_text_get(evas_object_data_get(obj, "lb3"));
+
+	mail = elm_object_text_get(evas_object_data_get(obj, "lb4"));
+
+	tlf_casa = elm_object_text_get(evas_object_data_get(obj, "lb5"));//tlf 
+
+	tlf_mobil = elm_object_text_get(evas_object_data_get(obj, "lb6"));//tlf
+
+	tlf_altres = elm_object_text_get(evas_object_data_get(obj, "lb7"));//tlf
+
+	altres = elm_object_text_get(evas_object_data_get(obj, "lb8"));
+if(DEBUG==1)printf("\n nom(carrega_registres)=%s\n cog1(carrega_registres)=%s\n cog2(carrega_registres)=%s\n mail(carrega_registres)=%s\n tlf_casa(carrega_registres)=%s\n tlf_mobil(carrega_registres)=%s\n tlf_altres(carrega_registres)=%s\n altres(carrega_registres)=%s\n",nom, cog1, cog2, mail, tlf_casa, tlf_mobil, tlf_altres, altres);
 
  if(DEBUG==1) printf("\n hauria de carregar els registres?\n");	
 	PGconn *conexion = conecta();
@@ -1592,8 +1385,8 @@ carrega_registres(void *data, Evas_Object *obj, void *event_info)
 	static int num = 0;
    	char *str = malloc(sizeof(char)*250 );//* 11);
 	Elm_Object_Item *hoversel_it;
-
-	 res = PQexec(conexion, SELECTT);
+	printf("\nSELECTT=%s\n\n",SELECTT);
+	 res = PQexec(conexion, SELECTT); //ÉS AQUÍ EL PROBLEMA DE QUE NO FILTRI, AQUÍ es llença un SELECT * FROM telefons ... s'ha de canviar aquí ...'
 	    if (PQresultStatus(res) != PGRES_TUPLES_OK)
 	    {
 		printf("\nHA FALLAT LA CONEXIÓ\n");
@@ -1609,7 +1402,7 @@ carrega_registres(void *data, Evas_Object *obj, void *event_info)
 	    // first, print out the table collumn attribute names
 	    nFields = PQnfields(res);
 	    nRows = PQntuples(res);
-
+		if(DEBUG==1)printf("\nnFields = %d\n nRows = %d\n",nFields,nRows);
 
 		for (fila=0;fila<=nRows-1;fila++){
 			if(fila==0) snprintf(str, 35, "%s","#####Primer camp######");
@@ -1634,7 +1427,7 @@ carrega_registres(void *data, Evas_Object *obj, void *event_info)
 			//generar camps 
 			}
 	}
-	printf("\nnúmero de camps = %d\n número de files %d\n",nFields, nRows);
+	if(DEBUG==1)printf("\nnúmero de camps = %d\n número de files %d\n",nFields, nRows);
 }
 
 static void
@@ -1740,37 +1533,6 @@ gd = elm_grid_add(finestra);
 
 
 
-
-/* pròximes entrades */
-/*
-Evas_Object *table, *scroller, *rect, *etiqueta;
-table = evas_object_table_add(finestra);
-evas_object_table_homogeneous_set(table, EVAS_OBJECT_TABLE_HOMOGENEOUS_NONE);
-evas_object_table_padding_set(table, 20, 20);
-evas_object_geometry_set(table,48,52,800,500);
-//evas_object_resize(table, 200, 600);
-//elm_grid_pack(gd,table,48,42,50,50);
-evas_object_show(table);
-rect = evas_object_rectangle_add(finestra);
-evas_object_color_set(rect, 10, 10,10,10); //255, 255, 255);
-scroller = elm_scroller_add(rect);
-evas_object_size_hint_min_set(rect, 300, 1200);
-elm_grid_pack(gd, rect, 48, 42, 50, 50);
-
-//how a container object should resize a given child within its area
-evas_object_size_hint_weight_set(table, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-//how to align an object
-evas_object_size_hint_align_set(table, EVAS_HINT_FILL, 0.5);
-evas_object_table_pack(table, rect, 1, 1, 1, 1);
-//how a container object should resize a given child within its area
-evas_object_size_hint_weight_set(rect, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-//how to align an object
-evas_object_size_hint_align_set(rect, EVAS_HINT_FILL, 0.5);
-//elm_grid_pack(gd, table,40,28,50,50);
-evas_object_resize(etiqueta,5,5);
-evas_object_show(etiqueta);
-evas_object_show(rect);
-*/
 Evas_Object *rect1, *hoversel, *btn = NULL;
    rect1 = evas_object_rectangle_add(evas_object_evas_get(finestra));
    evas_object_color_set(rect1, 255, 0, 0, 255);
@@ -1779,10 +1541,7 @@ Evas_Object *rect1, *hoversel, *btn = NULL;
    elm_hoversel_hover_parent_set(hoversel, finestra);
    elm_hoversel_horizontal_set(hoversel, EINA_FALSE);
    elm_object_text_set(hoversel, "Mostra Telefons");
-//   evas_object_smart_callback_add(hoversel,"clicked", neteja_hoversel, NULL);
-   evas_object_smart_callback_add(hoversel, "clicked", carrega_registres, entra);
-//   evas_object_resize(hoversel, 180, 30);
-//   evas_object_move(hoversel, 590, 690); //ho hauria de posar dins del grid, perque quan es mogui la finestra vagi bé 
+
 elm_grid_pack(gd, hoversel, 48, 48, 40, 40);
    evas_object_show(hoversel);
 
