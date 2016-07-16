@@ -833,6 +833,7 @@ Eina_Bool value;
    evas_object_size_hint_weight_set(en_nom, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
    evas_object_size_hint_align_set(en_nom, EVAS_HINT_FILL, EVAS_HINT_FILL);
    elm_object_text_set(en_nom, "Escriu el nom aquí");
+   evas_object_smart_callback_add(en_nom, "focused", neteja_text, en_nom);
    evas_object_show(en_nom);
    elm_grid_pack(gd, en_nom, 15, 8, 25, 5);
 
@@ -849,6 +850,7 @@ Eina_Bool value;
    evas_object_size_hint_weight_set(en_cog1, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
    evas_object_size_hint_align_set(en_cog1, EVAS_HINT_FILL, EVAS_HINT_FILL);
    elm_object_text_set(en_cog1, "Escriu el primer cognom aquí");
+   evas_object_smart_callback_add(en_cog1, "focused", neteja_text, en_cog1);
    evas_object_show(en_cog1);
    elm_grid_pack(gd, en_cog1, 15, 13, 25, 5);
 
@@ -865,6 +867,7 @@ Eina_Bool value;
    evas_object_size_hint_weight_set(en_cog2, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
    evas_object_size_hint_align_set(en_cog2, EVAS_HINT_FILL, EVAS_HINT_FILL);
    elm_object_text_set(en_cog2, "Escriu el segon cognom aquí");
+evas_object_smart_callback_add(en_cog2, "focused", neteja_text, en_cog2);
    evas_object_show(en_cog2);
    elm_grid_pack(gd, en_cog2, 15, 18, 25, 5);
 
@@ -881,6 +884,7 @@ Eina_Bool value;
    evas_object_size_hint_weight_set(en_mail, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
    evas_object_size_hint_align_set(en_mail, EVAS_HINT_FILL, EVAS_HINT_FILL);
    elm_object_text_set(en_mail, "Escriu el correu aquí");
+evas_object_smart_callback_add(en_mail, "focused", neteja_text, en_mail);
    evas_object_show(en_mail);
    elm_grid_pack(gd, en_mail, 15, 23, 25, 5);
 
@@ -896,6 +900,7 @@ Eina_Bool value;
    evas_object_size_hint_weight_set(en_tlf_casa, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
    evas_object_size_hint_align_set(en_tlf_casa, EVAS_HINT_FILL, EVAS_HINT_FILL);
    elm_object_text_set(en_tlf_casa, "Escriu el primer telefon aquí");
+evas_object_smart_callback_add(en_tlf_casa, "focused", neteja_text, en_tlf_casa);
    evas_object_show(en_tlf_casa);
    elm_grid_pack(gd, en_tlf_casa, 15, 28, 25, 5);
 
@@ -912,6 +917,7 @@ Eina_Bool value;
    evas_object_size_hint_weight_set(en_tlf_mobil1, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
    evas_object_size_hint_align_set(en_tlf_mobil1, EVAS_HINT_FILL, EVAS_HINT_FILL);
    elm_object_text_set(en_tlf_mobil1, "Escriu el segon telefon aquí");
+evas_object_smart_callback_add(en_tlf_mobil1, "focused", neteja_text, en_tlf_mobil1);
    evas_object_show(en_tlf_mobil1);
    elm_grid_pack(gd, en_tlf_mobil1, 15, 33, 25, 5);
 
@@ -928,6 +934,7 @@ Eina_Bool value;
    evas_object_size_hint_weight_set(en_tlf_altres, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
    evas_object_size_hint_align_set(en_tlf_altres, EVAS_HINT_FILL, EVAS_HINT_FILL);
    elm_object_text_set(en_tlf_altres, "Escriu el tercer telefon aquí");
+evas_object_smart_callback_add(en_tlf_altres, "focused", neteja_text, en_tlf_altres);
    evas_object_show(en_tlf_altres);
    elm_grid_pack(gd, en_tlf_altres, 15, 38, 25, 5);
 
@@ -945,6 +952,7 @@ en_altres = elm_entry_add(win);
    evas_object_size_hint_weight_set(en_altres, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
    evas_object_size_hint_align_set(en_altres, EVAS_HINT_FILL, EVAS_HINT_FILL);
    elm_object_text_set(en_altres, "Entra el que vulguis cercar");
+evas_object_smart_callback_add(en_altres, "focused", neteja_text, en_altres);
    evas_object_show(en_altres);
    elm_grid_pack(gd, en_altres, 15, 43, 25, 5);
 
@@ -1127,7 +1135,7 @@ _afegir(void *data, Evas_Object *obj, void *event_info)
    evas_object_size_hint_weight_set(en_nom, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
    evas_object_size_hint_align_set(en_nom, EVAS_HINT_FILL, EVAS_HINT_FILL);
    elm_object_text_set(en_nom, "Entra el nom");
-   evas_object_smart_callback_add(en_nom, "clicked", neteja_text, en_nom);
+   evas_object_smart_callback_add(en_nom, "focused", neteja_text, en_nom);//"clicked", neteja_text, en_nom);
    evas_object_show(en_nom);
    elm_grid_pack(gd, en_nom, 30, 10, 30, 6);
 
@@ -1136,7 +1144,7 @@ _afegir(void *data, Evas_Object *obj, void *event_info)
    evas_object_size_hint_weight_set(en_cog1, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
    evas_object_size_hint_align_set(en_cog1, EVAS_HINT_FILL, EVAS_HINT_FILL);
    elm_object_text_set(en_cog1, "Primer cognom");
-   evas_object_smart_callback_add(en_cog1, "clicked", neteja_text, en_cog1);
+   evas_object_smart_callback_add(en_cog1, "focused", neteja_text, en_cog1);
    evas_object_show(en_cog1);
    elm_grid_pack(gd, en_cog1, 30, 17, 30, 6);
 
@@ -1145,7 +1153,7 @@ _afegir(void *data, Evas_Object *obj, void *event_info)
    evas_object_size_hint_weight_set(en_cog2, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
    evas_object_size_hint_align_set(en_cog2, EVAS_HINT_FILL, EVAS_HINT_FILL);
    elm_object_text_set(en_cog2, "Segon cognom");
-   evas_object_smart_callback_add(en_cog2, "clicked", neteja_text, en_cog2);
+   evas_object_smart_callback_add(en_cog2, "focused", neteja_text, en_cog2);
    evas_object_show(en_cog2);
    elm_grid_pack(gd, en_cog2, 30, 24, 30, 6);
 
@@ -1154,7 +1162,7 @@ _afegir(void *data, Evas_Object *obj, void *event_info)
    evas_object_size_hint_weight_set(en_mail, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
    evas_object_size_hint_align_set(en_mail, EVAS_HINT_FILL, EVAS_HINT_FILL);
    elm_object_text_set(en_mail, "Correu electrònic");
-   evas_object_smart_callback_add(en_mail, "clicked", neteja_text, en_mail);
+   evas_object_smart_callback_add(en_mail, "focused", neteja_text, en_mail);
    evas_object_show(en_mail);
    elm_grid_pack(gd, en_mail, 30, 31, 30, 6);
 	
@@ -1163,7 +1171,7 @@ _afegir(void *data, Evas_Object *obj, void *event_info)
    evas_object_size_hint_weight_set(en_tlf_casa, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
    evas_object_size_hint_align_set(en_tlf_casa, EVAS_HINT_FILL, EVAS_HINT_FILL);
    elm_object_text_set(en_tlf_casa, "Telefon casa");
-   evas_object_smart_callback_add(en_tlf_casa, "clicked", neteja_text, en_tlf_casa);
+   evas_object_smart_callback_add(en_tlf_casa, "focused", neteja_text, en_tlf_casa);
    evas_object_show(en_tlf_casa);
    elm_grid_pack(gd, en_tlf_casa, 30, 38, 30, 6);
 
@@ -1172,7 +1180,7 @@ _afegir(void *data, Evas_Object *obj, void *event_info)
    evas_object_size_hint_weight_set(en_tlf_mobil1, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
    evas_object_size_hint_align_set(en_tlf_mobil1, EVAS_HINT_FILL, EVAS_HINT_FILL);
    elm_object_text_set(en_tlf_mobil1, "Telefon mòbil");
-   evas_object_smart_callback_add(en_tlf_mobil1, "clicked", neteja_text, en_tlf_mobil1);
+   evas_object_smart_callback_add(en_tlf_mobil1, "focused", neteja_text, en_tlf_mobil1);
    evas_object_show(en_tlf_mobil1);
    elm_grid_pack(gd, en_tlf_mobil1, 30, 45, 30, 6);
 
@@ -1181,7 +1189,7 @@ _afegir(void *data, Evas_Object *obj, void *event_info)
    evas_object_size_hint_weight_set(en_tlf_altres, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
    evas_object_size_hint_align_set(en_tlf_altres, EVAS_HINT_FILL, EVAS_HINT_FILL);
    elm_object_text_set(en_tlf_altres, "Tercer telefon");
-   evas_object_smart_callback_add(en_tlf_altres, "clicked", neteja_text, en_tlf_altres);
+   evas_object_smart_callback_add(en_tlf_altres, "focused", neteja_text, en_tlf_altres);
    evas_object_show(en_tlf_altres);
    elm_grid_pack(gd, en_tlf_altres, 30, 52, 30, 6);
 
@@ -1190,7 +1198,7 @@ _afegir(void *data, Evas_Object *obj, void *event_info)
    evas_object_size_hint_weight_set(en_altres, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
    evas_object_size_hint_align_set(en_altres, EVAS_HINT_FILL, EVAS_HINT_FILL);
    elm_object_text_set(en_altres, "Altres dades");
-   evas_object_smart_callback_add(en_altres, "clicked", neteja_text, en_altres);
+   evas_object_smart_callback_add(en_altres, "focused", neteja_text, en_altres);
    evas_object_show(en_altres);
    elm_grid_pack(gd, en_altres, 30, 59, 30, 6);
 
@@ -1358,7 +1366,7 @@ static void
 carrega_registres(void *data, Evas_Object *obj, void *event_info)
 {
  elm_hoversel_clear(data);
-const char *nom, *cog1, *cog2, *mail, *tlf_casa, *tlf_mobil, *tlf_altres, *altres;
+const char *nom, *cog1, *cog2, *mail, *tlf_casa, *tlf_mobil, *tlf_altres, *altres, cerca[16384];
 nom = elm_object_text_get(evas_object_data_get(obj, "lb1")); //passo el camp de text, no el quadre de text
 
 	cog1 = elm_object_text_get(evas_object_data_get(obj, "lb2"));
@@ -1386,16 +1394,173 @@ if(DEBUG==1)printf("\n nom(carrega_registres)=%s\n cog1(carrega_registres)=%s\n 
    	char *str = malloc(sizeof(char)*250 );//* 11);
 	Elm_Object_Item *hoversel_it;
 	printf("\nSELECTT=%s\n\n",SELECTT);
-	 res = PQexec(conexion, SELECTT); //ÉS AQUÍ EL PROBLEMA DE QUE NO FILTRI, AQUÍ es llença un SELECT * FROM telefons ... s'ha de canviar aquí ...'
-	    if (PQresultStatus(res) != PGRES_TUPLES_OK)
-	    {
+
+if(DEBUG==1)printf("\n nom=%s\n cog1=%s\n cog2=%s\n mail=%s\n tlf_casa=%s\n tlf_mobil=%s\n tlf_altres=%s\n altres=%s\n",nom, cog1, cog2, mail, tlf_casa, tlf_mobil, tlf_altres, altres);
+
+//nom
+	if(strcmp(nom,"Escriu el nom que vulguis cercar")==0) {
+		snprintf(cerca,2048, "%s", SELECTT);
+		if(DEBUG==1){
+			printf("\ncerca (nom buit)= %s\n",cerca);
+		}		
+	}
+	else{
+		snprintf(cerca,2048, "%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' ", SELECTT, nom);		
+		if(DEBUG==1)	printf("\ncerca (nom ple)= %s\n",cerca);
+	}
+//cog1
+//	if( strstr(" WHERE ",cerca)==0) {
+	if(strcmp(cog1,"Escriu el cognom1 que vulguis cercar")!=0) {
+		if( strstr(" WHERE ",cerca)==0) {
+
+			printf("\nja hi havia alguna cosa cog1\ncerca = %s\n",cerca);
+			//concatenar amb or
+			if(strcmp(nom,"Escriu el cognom1 que vulguis cercar")==0) {
+				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' and COALESCE(cognom1_telefons, '' ) like '\%%%s\%%'  ", SELECTT, nom, cog1);
+			}
+			else{
+				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' or COALESCE(cognom1_telefons, '' ) like '\%%%s\%%'  ", SELECTT, nom, cog1);
+
+			}
+			printf("\ncerca cognom net = %s\n", cerca);
+		} 
+		else{
+			printf("\nESTAVA NET cog1?\n");
+			//posar ls select completa
+			sprintf(cerca,"%s WHERE COALESCE(cognom1_telefons, '' ) like '\%%%s\%%' ", SELECTT, cog1);
+			printf("\ncerca cognom net = %s\n", cerca);		
+		}
+	}
+//cog2 ...
+	if(strcmp(cog2,"Escriu el cognom2 que vulguis cercar")!=0) {
+		if( strstr(" WHERE ",cerca)==0) {
+			printf("\nja hi havia alguna cosa cog2\n");
+			if(strcmp(nom,"Escriu el cognom2 que vulguis cercar")==0) {
+				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' and COALESCE(cognom1_telefons, '' ) like '\%%%s\%%' and COALESCE(cognom2_telefons, '' ) like '\%%%s\%%'  ", SELECTT, nom, cog1, cog2);
+
+			}
+			else{
+				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' or COALESCE(cognom1_telefons, '' ) like '\%%%s\%%'  or COALESCE(cognom2_telefons, '' ) like '\%%%s\%%' ", SELECTT, nom, cog1, cog2);
+			}
+			printf("\ncerca cognom2  = %s\n", cerca);
+		} 
+		else{
+			printf("\nESTAVA NET cog2?\n");
+			//posar ls select completa
+			snprintf(cerca,1024, "%s WHERE COALESCE(cognom2_telefons, '' ) like '\%%%s\%%' ", SELECTT, cog2);		
+		}
+	}
+	if(strcmp(mail,"Escriu el mail que vulguis cercar")!=0) {
+		if( strstr(" WHERE ",cerca)==0) {
+			if(DEBUG==1)printf("\nja hi havia alguna cosa mail\n");
+			if(strcmp(nom,"Escriu el mail que vulguis cercar")==0) {
+				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' and COALESCE(cognom1_telefons, '' ) like '\%%%s\%%' and COALESCE(cognom2_telefons, '' ) like '\%%%s\%%' and COALESCE(correu_telefons, '' ) like '\%%%s\%%' ", SELECTT, nom, cog1, cog2, mail);
+			}
+			else{
+				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' or COALESCE(cognom1_telefons, '' ) like '\%%%s\%%'  or COALESCE(cognom2_telefons, '' ) like '\%%%s\%%' or COALESCE(correu_telefons, '' ) like '\%%%s\%%' ", SELECTT, nom, cog1, cog2, mail);
+
+			}
+			printf("\ncerca mail = %s\n",cerca);
+		} 
+		else{
+			if(DEBUG==1)printf("\nESTAVA NET mail ?\n");
+			//posar ls select completa
+			snprintf(cerca,1024, "%s WHERE COALESCE(correu_telefons, '' ) like '\%%%s\%%' ", SELECTT, mail);		
+		}
+	}
+	if(strcmp(mail,"Escriu el telefon1 que vulguis cercar")!=0) {
+		if( strstr(" WHERE ",cerca)==0) {
+			if(DEBUG==1)printf("\nja hi havia alguna cosa telefon1\n");
+			//concatenar amb or
+			if(strcmp(nom,"Escriu el telefon1 que vulguis cercar")==0) {
+				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' and COALESCE(cognom1_telefons, '' ) like '\%%%s\%%' and COALESCE(cognom2_telefons, '' ) like '\%%%s\%%' and COALESCE(correu_telefons, '' ) like '\%%%s\%%' and  COALESCE(telefon_casa, '' ) like '\%%%s\%%' ", SELECTT, nom, cog1, cog2, mail, tlf_casa);
+
+			}
+			else{
+				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' or COALESCE(cognom1_telefons, '' ) like '\%%%s\%%'  or COALESCE(cognom2_telefons, '' ) like '\%%%s\%%' or COALESCE(correu_telefons, '' ) like '\%%%s\%%' or  COALESCE(telefon_casa, '' ) like '\%%%s\%%' ", SELECTT, nom, cog1, cog2, mail, tlf_casa);
+			}
+			printf("\ncerca telefon1 %s\n", cerca);
+		} 
+		else{
+			if(DEBUG==1)printf("\nESTAVA NET telefon1 ?\n");
+			//posar ls select completa
+			snprintf(cerca,1024, "%s WHERE COALESCE(telefon_casa, '' ) like '\%%%s\%%' ", SELECTT, tlf_casa);		
+		}
+	}
+	if(strcmp(mail,"Escriu el telefon2 que vulguis cercar")!=0) {
+		if( strstr(" WHERE ",cerca)==0) {
+			if(DEBUG==1)printf("\nja hi havia alguna cosa telefon2\n");
+			//concatenar amb or
+//			snprintf(cerca,1024, "%s or COALESCE(telefon_mobil, '' ) like '\%%%s\%%'  ", cerca, tlf_mobil);
+			if(strcmp(nom,"Escriu el telefon2 que vulguis cercar")==0) {
+				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' and COALESCE(cognom1_telefons, '' ) like '\%%%s\%%' and COALESCE(cognom2_telefons, '' ) like '\%%%s\%%' and COALESCE(correu_telefons, '' ) like '\%%%s\%%' and  COALESCE(telefon_casa, '' ) like '\%%%s\%%' and COALESCE(telefon_mobil, '' ) like '\%%%s\%%'  ", SELECTT, nom, cog1, cog2, mail, tlf_casa, tlf_mobil);
+
+			}
+			else{
+				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' or COALESCE(cognom1_telefons, '' ) like '\%%%s\%%'  or COALESCE(cognom2_telefons, '' ) like '\%%%s\%%' or COALESCE(correu_telefons, '' ) like '\%%%s\%%' or  COALESCE(telefon_casa, '' ) like '\%%%s\%%' or COALESCE(telefon_mobil, '' ) like '\%%%s\%%'  ", SELECTT, nom, cog1, cog2, mail, tlf_casa, tlf_mobil);
+			}
+			printf("\ncerca telefon2 %s\n", cerca);
+		} 
+		else{
+			if(DEBUG==1)printf("\nESTAVA NET telefon2 ?\n");
+			//posar ls select completa
+			snprintf(cerca,1024, "%s WHERE COALESCE(telefon_mobil, '' ) like '\%%%s\%%' ", SELECTT, tlf_mobil);		
+		}
+	}
+//Escriu el telefon3 que vulguis cercar
+	if(strcmp(mail,"Escriu el telefon3 que vulguis cercar")!=0) { //telefon 3
+		if( strstr(" WHERE ",cerca)==0) {
+			if(DEBUG==1)printf("\nja hi havia alguna cosa telefon3\n");
+			//concatenar amb or
+//			snprintf(cerca,1024, "%s or COALESCE(telefon_mobil, '' ) like '\%%%s\%%'  ", cerca, tlf_mobil);
+			if(strcmp(nom,"Escriu el telefon3 que vulguis cercar")==0) {
+				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' and COALESCE(cognom1_telefons, '' ) like '\%%%s\%%' and COALESCE(cognom2_telefons, '' ) like '\%%%s\%%' and COALESCE(correu_telefons, '' ) like '\%%%s\%%' and  COALESCE(telefon_casa, '' ) like '\%%%s\%%' and COALESCE(telefon_mobil, '' ) like '\%%%s\%%'  and COALESCE(telefon_2_mobil, '' ) like '\%%%s\%%'  ", SELECTT, nom, cog1, cog2, mail, tlf_casa, tlf_mobil, tlf_altres);
+
+			}
+			else{
+				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' or COALESCE(cognom1_telefons, '' ) like '\%%%s\%%'  or COALESCE(cognom2_telefons, '' ) like '\%%%s\%%' or COALESCE(correu_telefons, '' ) like '\%%%s\%%' or  COALESCE(telefon_casa, '' ) like '\%%%s\%%' or COALESCE(telefon_mobil, '' ) like '\%%%s\%%' or COALESCE(telefon_2_mobil, '' ) like '\%%%s\%%'  ", SELECTT, nom, cog1, cog2, mail, tlf_casa, tlf_mobil, tlf_altres);
+			}
+			printf("\ncerca telefon3 %s\n", cerca);
+		} 
+		else{
+			if(DEBUG==1)printf("\nESTAVA NET telefon2 ?\n");
+			//posar ls select completa
+			snprintf(cerca,1024, "%s WHERE COALESCE(telefon_mobil, '' ) like '\%%%s\%%' ", SELECTT, tlf_mobil);	
+		}
+	}
+	if(strcmp(mail,"Entra el que vulguis cercar")!=0) { //últim camp
+		if( strstr(" WHERE ",cerca)==0) {
+			if(DEBUG==1)printf("\nja hi havia alguna cosa telefon3\n");
+			//concatenar amb or
+			if(strcmp(nom,"Escriu el que vulguis cercar")==0) {
+				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' and COALESCE(cognom1_telefons, '' ) like '\%%%s\%%' and COALESCE(cognom2_telefons, '' ) like '\%%%s\%%' and COALESCE(correu_telefons, '' ) like '\%%%s\%%' and  COALESCE(telefon_casa, '' ) like '\%%%s\%%' and COALESCE(telefon_mobil, '' ) like '\%%%s\%%'  and COALESCE(altres_telefons, '' ) like '\%%%s\%%' and COALESCE(altres_telefons, '' ) like  '\%%%s\%%'", SELECTT, nom, cog1, cog2, mail, tlf_casa, tlf_mobil, tlf_altres, altres);
+				
+			}
+			else{
+				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' or COALESCE(cognom1_telefons, '' ) like '\%%%s\%%'  or COALESCE(cognom2_telefons, '' ) like '\%%%s\%%' or COALESCE(correu_telefons, '' ) like '\%%%s\%%' or  COALESCE(telefon_casa, '' ) like '\%%%s\%%' or COALESCE(telefon_mobil, '' ) like '\%%%s\%%'  or COALESCE(telefon_2_mobil, '' ) like '\%%%s\%%' or COALESCE(altres_telefons, '' ) like  '\%%%s\%%'", SELECTT, nom, cog1, cog2, mail, tlf_casa, tlf_mobil, tlf_altres, altres);
+			}
+			printf("\ncerca \"altres\" %s\n", cerca);
+		} 
+		else{
+			if(DEBUG==1)printf("\nESTAVA NET telefon3 ?\n");
+			//posar ls select completa
+			snprintf(cerca,1024, "%s WHERE COALESCE(altres_telefons, '' ) like '\%%%s\%%' ", SELECTT, tlf_altres);		
+		}
+	}
+
+
+								printf("\nRESULTAT CERCA : \'%s\'\n",cerca);
+	
+	res = PQexec(conexion,cerca);
+	if (PQresultStatus(res) != PGRES_TUPLES_OK)
+	{
 		printf("\nHA FALLAT LA CONEXIÓ\n");
 		PQerrorMessage(res);
 	        fprintf(stderr, "SELECTT failed: %s", PQerrorMessage(conexion));
 	        //exit_nicely(conn,res);
 		PQclear(res);
 		PQfinish(conexion);
-	    }
+	}
 	PQerrorMessage(res);
 	 desconecta(conexion);
 
