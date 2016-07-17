@@ -32,7 +32,7 @@
 
 int pagina=1;
 
-static void carrega_registres(void *data, Evas_Object *obj, void *event_info);
+static void carrega_registres_cerca(void *data, Evas_Object *obj, void *event_info);
 
 static void neteja_hoversel(void *data, Evas_Object *obj, void *event_info);
 
@@ -442,7 +442,7 @@ evas_object_data_set(hoversel, "lb1", en_nom); //carreguem les dades al butó ..
    evas_object_data_set(hoversel, "lb6", en_tlf_mobil1);//carreguem les dades al butó ...
    evas_object_data_set(hoversel, "lb7", en_tlf_altres);//carreguem les dades al butó ...
    evas_object_data_set(hoversel, "lb8", en_altres);//carreguem les dades al butó ...
-   evas_object_smart_callback_add(hoversel, "clicked", carrega_registres,en );
+   evas_object_smart_callback_add(hoversel, "clicked", carrega_registres_cerca,en );
 // evas_object_smart_callback_add(hoversel, "clicked", cerca_bt_clicked, NULL);
 // evas_object_smart_callback_add(bt, "clicked", cerca_bt_clicked, en);
 /*
@@ -819,7 +819,7 @@ Evas_Object *rect1, *hoversel, *btn = NULL;
    evas_object_data_set(hoversel, "lb6", en_tlf_mobil1);//carreguem les dades al butó ...
    evas_object_data_set(hoversel, "lb7", en_tlf_altres);//carreguem les dades al butó ...
    evas_object_data_set(hoversel, "lb8", en_altres);//carreguem les dades al butó ...
-   evas_object_smart_callback_add(hoversel, "clicked", carrega_registres,en );
+   evas_object_smart_callback_add(hoversel, "clicked", carrega_registres_cerca,en );
  evas_object_data_set(en_nom, "lb1", hoversel);
 evas_object_smart_callback_add(en_nom, "clicked", neteja_hoversel, hoversel);
  evas_object_data_set(en_cog1, "lb1", hoversel);
@@ -836,7 +836,7 @@ evas_object_smart_callback_add(en_tlf_mobil1, "clicked", neteja_hoversel, hovers
 evas_object_smart_callback_add(en_tlf_altres, "clicked", neteja_hoversel, hoversel);
  evas_object_data_set(en_altres, "lb1", hoversel);
 evas_object_smart_callback_add(en_altres, "clicked", neteja_hoversel, hoversel);
-   elm_grid_pack(gd, hoversel, 62, 12, 38, 12);
+   elm_grid_pack(gd, hoversel, 62, 5, 38, 12);
  //  evas_object_show(hoversel);
 
 
@@ -955,7 +955,34 @@ elm_grid_pack(gd, bt_torna, 30, 15, 10, 16);
 
 
 }
+static void
+_error(void *data, Evas_Object *obj, void *event_info)
+{
+Evas_Object *win,*gd, *bt_torna,*error;
+  win = elm_win_util_standard_add("error", "Error!!!");
+error = elm_entry_add(win); //nom
+gd = elm_grid_add(win);
+   elm_grid_size_set(gd, 50, 50);
+   evas_object_size_hint_weight_set(gd, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+   evas_object_size_hint_min_set(gd, 544 * elm_config_scale_get(), 374 * elm_config_scale_get());
+   elm_win_resize_object_add(win, gd);
+   evas_object_show(gd);
+   elm_entry_scrollable_set(error, EINA_TRUE);
+   evas_object_size_hint_weight_set(error, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+   evas_object_size_hint_align_set(error, EVAS_HINT_FILL, EVAS_HINT_FILL);
+   elm_object_text_set(error, "HI HA UN ERROR, REVISA-HO");
+ bt_torna = elm_button_add(win);
+elm_object_text_set(bt_torna, "Torna");
+   evas_object_show(bt_torna);
+evas_object_smart_callback_add(bt_torna, "clicked",_torna, win);
+//   evas_object_smart_callback_add(en_nom, "clicked", neteja_text, en_nom);
+elm_grid_pack(gd, error, 20, 15, 10, 18);
+elm_grid_pack(gd, bt_torna, 30, 15, 10, 16);
 
+   evas_object_show(error);
+   evas_object_show(win);
+
+}
 static void
 _afegir(void *data, Evas_Object *obj, void *event_info)
 {
@@ -1385,7 +1412,7 @@ void cerca_valors(char *nom, char *cog1, char *cog2,  char *mail, char *tlf_casa
 
 }
 static void
-carrega_registres(void *data, Evas_Object *obj, void *event_info)
+carrega_registres_cerca(void *data, Evas_Object *obj, void *event_info)
 {
 printf("\nEstic dins de \nCARREGA_REGISTRES\n\n");
 
@@ -1552,7 +1579,8 @@ Evas_Object *rect1, *hoversel, *btn = NULL;
    elm_hoversel_horizontal_set(hoversel, EINA_FALSE);
    elm_object_text_set(hoversel, "Mostra Telefons");
    elm_grid_pack(gd, hoversel, 48, 48, 40, 40);
-   evas_object_show(hoversel);
+evas_object_smart_callback_add(hoversel, "clicked",_error, finestra);   
+evas_object_show(hoversel);
   printf("\n focus hoversel = %d\n",elm_object_focus_get(hoversel));// focus hoversel = 0
    elm_object_focus_set(hoversel,EINA_TRUE);
    printf("\n focus hoversel = %d\n",elm_object_focus_get(hoversel));// focus hoversel = 0
@@ -1612,7 +1640,7 @@ evas_object_show(bt_search);
 //BORRAR
 bt_drop = elm_button_add(finestra);
 elm_object_text_set(bt_drop, "Borra ");
-evas_object_smart_callback_add(bt_drop, "clicked", _esborra, finestra);
+evas_object_smart_callback_add(bt_drop, "clicked", _error, finestra);
 evas_object_resize(bt_drop, 120,80);
 //evas_object_move(bt_drop, (WIDTH/2)-60, (5*HEIGHT/8)-40);
  //how a container object should resize a given child within its area
