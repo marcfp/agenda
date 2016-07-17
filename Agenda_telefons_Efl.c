@@ -32,11 +32,9 @@
 
 int pagina=1;
 
-static void _print_items(void *data, Evas_Object *obj, void *event_info);
 static void carrega_registres(void *data, Evas_Object *obj, void *event_info);
-static void _free(void *data, Evas_Object *obj, void *event_info);
-static void _add_item(void *data, Evas_Object *obj, void *event_info);
 
+static void neteja_hoversel(void *data, Evas_Object *obj, void *event_info);
 
 /* here just to keep our example's window size and background image's
  * size in synchrony */
@@ -434,7 +432,7 @@ Evas_Object *rect1, *hoversel, *btn = NULL;
    hoversel = elm_hoversel_add(win);
    elm_hoversel_hover_parent_set(hoversel, win);
    elm_hoversel_horizontal_set(hoversel, EINA_FALSE);
-   elm_object_text_set(hoversel, "Mostra Registre");
+   elm_object_text_set(hoversel, "Esborra Registre");
 evas_object_data_set(hoversel, "lb1", en_nom); //carreguem les dades al butó ...
    evas_object_data_set(hoversel, "lb2", en_cog1);//carreguem les dades al butó ...
    evas_object_data_set(hoversel, "lb3", en_cog2);//carreguem les dades al butó ...
@@ -464,7 +462,7 @@ https://docs.enlightenment.org/api/ecore/doc/html/
 
     if(DEBUG==1) printf("\nelm_check_state_get\n(check_nom)=%s\n",elm_check_state_get(check_nom));
    bt = elm_button_add(win);
-   elm_object_text_set(bt, "Cerca");
+   elm_object_text_set(bt, "Esborra");
    elm_grid_pack(gd, bt, 10,70,15,5);
    evas_object_data_set(bt, "lb1", en_nom); //carreguem les dades al butó ...
    evas_object_data_set(bt, "lb2", en_cog1);//carreguem les dades al butó ...
@@ -568,157 +566,7 @@ if(DEBUG==1)	printf("\naquí cercaré ...\n");
 
 	if(DEBUG==1)printf("\n nom=%s\n cog1=%s\n cog2=%s\n mail=%s\n tlf_casa=%s\n tlf_mobil=%s\n tlf_altres=%s\n altres=%s\n",nom, cog1, cog2, mail, tlf_casa, tlf_mobil, tlf_altres, altres);
 
-//nom
-	if(strcmp(nom,"Escriu el nom que vulguis cercar")==0) {
-		snprintf(cerca,2048, "%s", SELECTT);
-		if(DEBUG==1){
-			printf("\ncerca (nom buit)= %s\n",cerca);
-		}		
-	}
-	else{
-		snprintf(cerca,2048, "%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' ", SELECTT, nom);		
-		if(DEBUG==1)	printf("\ncerca (nom ple)= %s\n",cerca);
-	}
-//cog1
-//	if( strstr(" WHERE ",cerca)==0) {
-	if(strcmp(cog1,"Escriu el cognom1 que vulguis cercar")!=0) {
-		if( strstr(" WHERE ",cerca)==0) {
-
-			printf("\nja hi havia alguna cosa cog1\ncerca = %s\n",cerca);
-			//concatenar amb or
-			if(strcmp(nom,"Escriu el cognom1 que vulguis cercar")==0) {
-				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' and COALESCE(cognom1_telefons, '' ) like '\%%%s\%%'  ", SELECTT, nom, cog1);
-			}
-			else{
-				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' or COALESCE(cognom1_telefons, '' ) like '\%%%s\%%'  ", SELECTT, nom, cog1);
-
-			}
-			printf("\ncerca cognom net = %s\n", cerca);
-		} 
-		else{
-			printf("\nESTAVA NET cog1?\n");
-			//posar ls select completa
-			sprintf(cerca,"%s WHERE COALESCE(cognom1_telefons, '' ) like '\%%%s\%%' ", SELECTT, cog1);
-			printf("\ncerca cognom net = %s\n", cerca);		
-		}
-	}
-//cog2 ...
-	if(strcmp(cog2,"Escriu el cognom2 que vulguis cercar")!=0) {
-		if( strstr(" WHERE ",cerca)==0) {
-			printf("\nja hi havia alguna cosa cog2\n");
-			if(strcmp(nom,"Escriu el cognom2 que vulguis cercar")==0) {
-				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' and COALESCE(cognom1_telefons, '' ) like '\%%%s\%%' and COALESCE(cognom2_telefons, '' ) like '\%%%s\%%'  ", SELECTT, nom, cog1, cog2);
-
-			}
-			else{
-				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' or COALESCE(cognom1_telefons, '' ) like '\%%%s\%%'  or COALESCE(cognom2_telefons, '' ) like '\%%%s\%%' ", SELECTT, nom, cog1, cog2);
-			}
-			printf("\ncerca cognom2  = %s\n", cerca);
-		} 
-		else{
-			printf("\nESTAVA NET cog2?\n");
-			//posar ls select completa
-			snprintf(cerca,1024, "%s WHERE COALESCE(cognom2_telefons, '' ) like '\%%%s\%%' ", SELECTT, cog2);		
-		}
-	}
-	if(strcmp(mail,"Escriu el mail que vulguis cercar")!=0) {
-		if( strstr(" WHERE ",cerca)==0) {
-			if(DEBUG==1)printf("\nja hi havia alguna cosa mail\n");
-			if(strcmp(nom,"Escriu el mail que vulguis cercar")==0) {
-				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' and COALESCE(cognom1_telefons, '' ) like '\%%%s\%%' and COALESCE(cognom2_telefons, '' ) like '\%%%s\%%' and COALESCE(correu_telefons, '' ) like '\%%%s\%%' ", SELECTT, nom, cog1, cog2, mail);
-			}
-			else{
-				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' or COALESCE(cognom1_telefons, '' ) like '\%%%s\%%'  or COALESCE(cognom2_telefons, '' ) like '\%%%s\%%' or COALESCE(correu_telefons, '' ) like '\%%%s\%%' ", SELECTT, nom, cog1, cog2, mail);
-
-			}
-			printf("\ncerca mail = %s\n",cerca);
-		} 
-		else{
-			if(DEBUG==1)printf("\nESTAVA NET mail ?\n");
-			//posar ls select completa
-			snprintf(cerca,1024, "%s WHERE COALESCE(correu_telefons, '' ) like '\%%%s\%%' ", SELECTT, mail);		
-		}
-	}
-	if(strcmp(mail,"Escriu el telefon1 que vulguis cercar")!=0) {
-		if( strstr(" WHERE ",cerca)==0) {
-			if(DEBUG==1)printf("\nja hi havia alguna cosa telefon1\n");
-			//concatenar amb or
-			if(strcmp(nom,"Escriu el telefon1 que vulguis cercar")==0) {
-				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' and COALESCE(cognom1_telefons, '' ) like '\%%%s\%%' and COALESCE(cognom2_telefons, '' ) like '\%%%s\%%' and COALESCE(correu_telefons, '' ) like '\%%%s\%%' and  COALESCE(telefon_casa, '' ) like '\%%%s\%%' ", SELECTT, nom, cog1, cog2, mail, tlf_casa);
-
-			}
-			else{
-				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' or COALESCE(cognom1_telefons, '' ) like '\%%%s\%%'  or COALESCE(cognom2_telefons, '' ) like '\%%%s\%%' or COALESCE(correu_telefons, '' ) like '\%%%s\%%' or  COALESCE(telefon_casa, '' ) like '\%%%s\%%' ", SELECTT, nom, cog1, cog2, mail, tlf_casa);
-			}
-			printf("\ncerca telefon1 %s\n", cerca);
-		} 
-		else{
-			if(DEBUG==1)printf("\nESTAVA NET telefon1 ?\n");
-			//posar ls select completa
-			snprintf(cerca,1024, "%s WHERE COALESCE(telefon_casa, '' ) like '\%%%s\%%' ", SELECTT, tlf_casa);		
-		}
-	}
-	if(strcmp(mail,"Escriu el telefon2 que vulguis cercar")!=0) {
-		if( strstr(" WHERE ",cerca)==0) {
-			if(DEBUG==1)printf("\nja hi havia alguna cosa telefon2\n");
-			//concatenar amb or
-//			snprintf(cerca,1024, "%s or COALESCE(telefon_mobil, '' ) like '\%%%s\%%'  ", cerca, tlf_mobil);
-			if(strcmp(nom,"Escriu el telefon2 que vulguis cercar")==0) {
-				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' and COALESCE(cognom1_telefons, '' ) like '\%%%s\%%' and COALESCE(cognom2_telefons, '' ) like '\%%%s\%%' and COALESCE(correu_telefons, '' ) like '\%%%s\%%' and  COALESCE(telefon_casa, '' ) like '\%%%s\%%' and COALESCE(telefon_mobil, '' ) like '\%%%s\%%'  ", SELECTT, nom, cog1, cog2, mail, tlf_casa, tlf_mobil);
-
-			}
-			else{
-				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' or COALESCE(cognom1_telefons, '' ) like '\%%%s\%%'  or COALESCE(cognom2_telefons, '' ) like '\%%%s\%%' or COALESCE(correu_telefons, '' ) like '\%%%s\%%' or  COALESCE(telefon_casa, '' ) like '\%%%s\%%' or COALESCE(telefon_mobil, '' ) like '\%%%s\%%'  ", SELECTT, nom, cog1, cog2, mail, tlf_casa, tlf_mobil);
-			}
-			printf("\ncerca telefon2 %s\n", cerca);
-		} 
-		else{
-			if(DEBUG==1)printf("\nESTAVA NET telefon2 ?\n");
-			//posar ls select completa
-			snprintf(cerca,1024, "%s WHERE COALESCE(telefon_mobil, '' ) like '\%%%s\%%' ", SELECTT, tlf_mobil);		
-		}
-	}
-//Escriu el telefon3 que vulguis cercar
-	if(strcmp(mail,"Escriu el telefon3 que vulguis cercar")!=0) { //telefon 3
-		if( strstr(" WHERE ",cerca)==0) {
-			if(DEBUG==1)printf("\nja hi havia alguna cosa telefon3\n");
-			//concatenar amb or
-//			snprintf(cerca,1024, "%s or COALESCE(telefon_mobil, '' ) like '\%%%s\%%'  ", cerca, tlf_mobil);
-			if(strcmp(nom,"Escriu el telefon3 que vulguis cercar")==0) {
-				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' and COALESCE(cognom1_telefons, '' ) like '\%%%s\%%' and COALESCE(cognom2_telefons, '' ) like '\%%%s\%%' and COALESCE(correu_telefons, '' ) like '\%%%s\%%' and  COALESCE(telefon_casa, '' ) like '\%%%s\%%' and COALESCE(telefon_mobil, '' ) like '\%%%s\%%'  and COALESCE(telefon_2_mobil, '' ) like '\%%%s\%%'  ", SELECTT, nom, cog1, cog2, mail, tlf_casa, tlf_mobil, tlf_altres);
-
-			}
-			else{
-				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' or COALESCE(cognom1_telefons, '' ) like '\%%%s\%%'  or COALESCE(cognom2_telefons, '' ) like '\%%%s\%%' or COALESCE(correu_telefons, '' ) like '\%%%s\%%' or  COALESCE(telefon_casa, '' ) like '\%%%s\%%' or COALESCE(telefon_mobil, '' ) like '\%%%s\%%' or COALESCE(telefon_2_mobil, '' ) like '\%%%s\%%'  ", SELECTT, nom, cog1, cog2, mail, tlf_casa, tlf_mobil, tlf_altres);
-			}
-			printf("\ncerca telefon3 %s\n", cerca);
-		} 
-		else{
-			if(DEBUG==1)printf("\nESTAVA NET telefon2 ?\n");
-			//posar ls select completa
-			snprintf(cerca,1024, "%s WHERE COALESCE(telefon_mobil, '' ) like '\%%%s\%%' ", SELECTT, tlf_mobil);	
-		}
-	}
-	if(strcmp(mail,"Entra el que vulguis cercar")!=0) { //últim camp
-		if( strstr(" WHERE ",cerca)==0) {
-			if(DEBUG==1)printf("\nja hi havia alguna cosa telefon3\n");
-			//concatenar amb or
-			if(strcmp(nom,"Escriu el que vulguis cercar")==0) {
-				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' and COALESCE(cognom1_telefons, '' ) like '\%%%s\%%' and COALESCE(cognom2_telefons, '' ) like '\%%%s\%%' and COALESCE(correu_telefons, '' ) like '\%%%s\%%' and  COALESCE(telefon_casa, '' ) like '\%%%s\%%' and COALESCE(telefon_mobil, '' ) like '\%%%s\%%'  and COALESCE(altres_telefons, '' ) like '\%%%s\%%' and COALESCE(altres_telefons, '' ) like  '\%%%s\%%'", SELECTT, nom, cog1, cog2, mail, tlf_casa, tlf_mobil, tlf_altres, altres);
-				
-			}
-			else{
-				sprintf(cerca,"%s WHERE COALESCE(nom_telefons, '' ) like '\%%%s\%%' or COALESCE(cognom1_telefons, '' ) like '\%%%s\%%'  or COALESCE(cognom2_telefons, '' ) like '\%%%s\%%' or COALESCE(correu_telefons, '' ) like '\%%%s\%%' or  COALESCE(telefon_casa, '' ) like '\%%%s\%%' or COALESCE(telefon_mobil, '' ) like '\%%%s\%%'  or COALESCE(telefon_2_mobil, '' ) like '\%%%s\%%' or COALESCE(altres_telefons, '' ) like  '\%%%s\%%'", SELECTT, nom, cog1, cog2, mail, tlf_casa, tlf_mobil, tlf_altres, altres);
-			}
-			printf("\ncerca \"altres\" %s\n", cerca);
-		} 
-		else{
-			if(DEBUG==1)printf("\nESTAVA NET telefon3 ?\n");
-			//posar ls select completa
-			snprintf(cerca,1024, "%s WHERE COALESCE(altres_telefons, '' ) like '\%%%s\%%' ", SELECTT, tlf_altres);		
-		}
-	}
-
+cerca_valors(nom,cog1, cog2, mail, tlf_casa, tlf_mobil, tlf_altres, altres, cerca);
 
 								printf("\nRESULTAT CERCA : \'%s\'\n",cerca);
 	
@@ -778,14 +626,10 @@ _cerca(void *data, Evas_Object *obj, void *event_info)
 	if(DEBUG) printf("\nCerca\n");
 	
 /* 
-	EL TINC MAL PLANTEJAT ? NO POT SER QUE HAGI DE FER UN TEXT_BOX, ENTRAR EL CAMP I ESCOLLIR EL QUE ÉS D'UN LIST BOX ? I A PARTIR D'AQUÍ LLENSAR LA CERCA ? AMB AIXÒ _transitions[9] NO ES POT FER ?
-
 https://blog.jooq.org/2014/12/30/the-awesome-postgresql-9-4-sql2003-filter-clause-for-aggregate-functions/
 http://www.techonthenet.com/postgresql/like.php
 https://www.postgresql.org/docs/9.4/static/sql-expressions.html
 http://www.cybertec.at/2015/02/postgresql-9-4-aggregation-filters-they-do-pay-off/
-
-
 */
 Evas_Object *win, *gd, *bg, *en, *tg, *lb, *sp, *en_nomt, *en_nom, *en_cog1t, *en_cog1, *en_cog2t, *en_cog2, *en_mailt, *en_mail,   *en_tlf_casat, *en_tlf_casa,  *en_tlf_mobil1t, *en_tlf_mobil1,  *en_tlf_altrest, *en_tlf_altres,   *en_altrest, *en_altres;
    Evas_Object *bt, *en2;
@@ -834,7 +678,7 @@ Eina_Bool value;
    evas_object_size_hint_align_set(en_nom, EVAS_HINT_FILL, EVAS_HINT_FILL);
    elm_object_text_set(en_nom, "Escriu el nom aquí");
    evas_object_smart_callback_add(en_nom, "focused", neteja_text, en_nom);
-   evas_object_show(en_nom);
+      evas_object_show(en_nom);
    elm_grid_pack(gd, en_nom, 15, 8, 25, 5);
 
 
@@ -965,7 +809,7 @@ Evas_Object *rect1, *hoversel, *btn = NULL;
    hoversel = elm_hoversel_add(win);
    elm_hoversel_hover_parent_set(hoversel, win);
    elm_hoversel_horizontal_set(hoversel, EINA_FALSE);
-   elm_object_text_set(hoversel, "Mostra Registre");
+   elm_object_text_set(hoversel, "Cerca Registre");
    evas_object_data_set(hoversel, "lb1", en_nom); //carreguem les dades al butó ...
    evas_object_data_set(hoversel, "lb2", en_cog1);//carreguem les dades al butó ...
    evas_object_data_set(hoversel, "lb3", en_cog2);//carreguem les dades al butó ...
@@ -974,18 +818,26 @@ Evas_Object *rect1, *hoversel, *btn = NULL;
    evas_object_data_set(hoversel, "lb6", en_tlf_mobil1);//carreguem les dades al butó ...
    evas_object_data_set(hoversel, "lb7", en_tlf_altres);//carreguem les dades al butó ...
    evas_object_data_set(hoversel, "lb8", en_altres);//carreguem les dades al butó ...
+//   evas_object_smart_callback_add(hoversel, "clicked", _clear_btn_clicked_cb, hoversel);//neteja_hoversel, hoversel);//no funciona, no netejo res
    evas_object_smart_callback_add(hoversel, "clicked", carrega_registres,en );
 // evas_object_smart_callback_add(hoversel, "clicked", cerca_bt_clicked, NULL);
 // evas_object_smart_callback_add(bt, "clicked", cerca_bt_clicked, en);
-
-   evas_object_smart_callback_add(hoversel,"" , NULL , NULL );//"clicked", registre, entra); //és la línea bona
-   elm_grid_pack(gd, hoversel, 62, 2, 38, 2);
+evas_object_smart_callback_add(en_nom, "clicked", neteja_hoversel, hoversel);
+evas_object_smart_callback_add(en_cog1, "clicked", neteja_hoversel, hoversel);
+evas_object_smart_callback_add(en_cog2, "clicked", neteja_hoversel, hoversel);
+evas_object_smart_callback_add(en_mail, "clicked", neteja_hoversel, hoversel);
+evas_object_smart_callback_add(en_tlf_casa, "clicked", neteja_hoversel, hoversel);
+evas_object_smart_callback_add(en_tlf_mobil1, "clicked", neteja_hoversel, hoversel);
+evas_object_smart_callback_add(en_tlf_altres, "clicked", neteja_hoversel, hoversel);
+evas_object_smart_callback_add(en_altres, "clicked", neteja_hoversel, hoversel);
+//   evas_object_smart_callback_add(hoversel,"" , NULL , NULL );//"clicked", registre, entra); //és la línea bona
+   elm_grid_pack(gd, hoversel, 62, 12, 38, 12);
    evas_object_show(hoversel);
 
 
   // printf("\nelm_check_state_get\n(check_nom)=%s\n",elm_check_state_get(check_nom));
    bt = elm_button_add(win);
-   elm_object_text_set(bt, "Cerca");
+   elm_object_text_set(bt, "Cerca(consola)");
    elm_grid_pack(gd, bt, 10,70,15,5);
    evas_object_data_set(bt, "lb1", en_nom); //carreguem les dades al butó ...
    evas_object_data_set(bt, "lb2", en_cog1);//carreguem les dades al butó ...
@@ -1333,12 +1185,6 @@ _my_animation(void *data, double pos)
 }
 
 static void
-_clear_btn_clicked_cb(void *data, Evas_Object *obj, void *event_info)
-{
-   if (!data) return;
-   elm_hoversel_clear((Evas_Object *)data);
-}
-static void
 _reverse_btn_clicked_cb(void *data, Evas_Object *obj, void *event_info)
 {
    if (!data) return;
@@ -1360,45 +1206,23 @@ static int entra=0;
 static void
 neteja_hoversel(void *data, Evas_Object *obj, void *event_info)
 {
-elm_hoversel_clear(data);
+//elm_obj_hoversel_clear((Evas_Object *)data);
+elm_obj_hoversel_clear();
+
+//No en funciona cap
 }
 static void
-carrega_registres(void *data, Evas_Object *obj, void *event_info)
+_clear_btn_clicked_cb(void *data, Evas_Object *obj, void *event_info)
 {
- elm_hoversel_clear(data);
-const char *nom, *cog1, *cog2, *mail, *tlf_casa, *tlf_mobil, *tlf_altres, *altres, cerca[16384];
-nom = elm_object_text_get(evas_object_data_get(obj, "lb1")); //passo el camp de text, no el quadre de text
+   if (!data) return;
+   elm_hoversel_clear((Evas_Object *)data);
+}
 
-	cog1 = elm_object_text_get(evas_object_data_get(obj, "lb2"));
-
-	cog2 = elm_object_text_get(evas_object_data_get(obj, "lb3"));
-
-	mail = elm_object_text_get(evas_object_data_get(obj, "lb4"));
-
-	tlf_casa = elm_object_text_get(evas_object_data_get(obj, "lb5"));//tlf 
-
-	tlf_mobil = elm_object_text_get(evas_object_data_get(obj, "lb6"));//tlf
-
-	tlf_altres = elm_object_text_get(evas_object_data_get(obj, "lb7"));//tlf
-
-	altres = elm_object_text_get(evas_object_data_get(obj, "lb8"));
-if(DEBUG==1)printf("\n nom(carrega_registres)=%s\n cog1(carrega_registres)=%s\n cog2(carrega_registres)=%s\n mail(carrega_registres)=%s\n tlf_casa(carrega_registres)=%s\n tlf_mobil(carrega_registres)=%s\n tlf_altres(carrega_registres)=%s\n altres(carrega_registres)=%s\n",nom, cog1, cog2, mail, tlf_casa, tlf_mobil, tlf_altres, altres);
-
- if(DEBUG==1) printf("\n hauria de carregar els registres?\n");	
-	PGconn *conexion = conecta();
-	PGresult        *res;
-	int rec_count, fila, camp;
-	int nFields, nRows;
-
-	static int num = 0;
-   	char *str = malloc(sizeof(char)*250 );//* 11);
-	Elm_Object_Item *hoversel_it;
-	printf("\nSELECTT=%s\n\n",SELECTT);
-
-if(DEBUG==1)printf("\n nom=%s\n cog1=%s\n cog2=%s\n mail=%s\n tlf_casa=%s\n tlf_mobil=%s\n tlf_altres=%s\n altres=%s\n",nom, cog1, cog2, mail, tlf_casa, tlf_mobil, tlf_altres, altres);
+void cerca_valors(char *nom, char *cog1, char *cog2,  char *mail, char *tlf_casa, char *tlf_mobil, char *tlf_altres, char *altres, char cerca[16384])
+{
 
 //nom
-	if(strcmp(nom,"Escriu el nom que vulguis cercar")==0) {
+	if(strcmp(nom,"Escriu el nom que vulguis cercar")!=0) {
 		snprintf(cerca,2048, "%s", SELECTT);
 		if(DEBUG==1){
 			printf("\ncerca (nom buit)= %s\n",cerca);
@@ -1450,6 +1274,7 @@ if(DEBUG==1)printf("\n nom=%s\n cog1=%s\n cog2=%s\n mail=%s\n tlf_casa=%s\n tlf_
 			snprintf(cerca,1024, "%s WHERE COALESCE(cognom2_telefons, '' ) like '\%%%s\%%' ", SELECTT, cog2);		
 		}
 	}
+//mail
 	if(strcmp(mail,"Escriu el mail que vulguis cercar")!=0) {
 		if( strstr(" WHERE ",cerca)==0) {
 			if(DEBUG==1)printf("\nja hi havia alguna cosa mail\n");
@@ -1468,6 +1293,7 @@ if(DEBUG==1)printf("\n nom=%s\n cog1=%s\n cog2=%s\n mail=%s\n tlf_casa=%s\n tlf_
 			snprintf(cerca,1024, "%s WHERE COALESCE(correu_telefons, '' ) like '\%%%s\%%' ", SELECTT, mail);		
 		}
 	}
+//tlf1
 	if(strcmp(mail,"Escriu el telefon1 que vulguis cercar")!=0) {
 		if( strstr(" WHERE ",cerca)==0) {
 			if(DEBUG==1)printf("\nja hi havia alguna cosa telefon1\n");
@@ -1487,6 +1313,7 @@ if(DEBUG==1)printf("\n nom=%s\n cog1=%s\n cog2=%s\n mail=%s\n tlf_casa=%s\n tlf_
 			snprintf(cerca,1024, "%s WHERE COALESCE(telefon_casa, '' ) like '\%%%s\%%' ", SELECTT, tlf_casa);		
 		}
 	}
+//tlf2
 	if(strcmp(mail,"Escriu el telefon2 que vulguis cercar")!=0) {
 		if( strstr(" WHERE ",cerca)==0) {
 			if(DEBUG==1)printf("\nja hi havia alguna cosa telefon2\n");
@@ -1507,7 +1334,7 @@ if(DEBUG==1)printf("\n nom=%s\n cog1=%s\n cog2=%s\n mail=%s\n tlf_casa=%s\n tlf_
 			snprintf(cerca,1024, "%s WHERE COALESCE(telefon_mobil, '' ) like '\%%%s\%%' ", SELECTT, tlf_mobil);		
 		}
 	}
-//Escriu el telefon3 que vulguis cercar
+//tlf3
 	if(strcmp(mail,"Escriu el telefon3 que vulguis cercar")!=0) { //telefon 3
 		if( strstr(" WHERE ",cerca)==0) {
 			if(DEBUG==1)printf("\nja hi havia alguna cosa telefon3\n");
@@ -1528,6 +1355,7 @@ if(DEBUG==1)printf("\n nom=%s\n cog1=%s\n cog2=%s\n mail=%s\n tlf_casa=%s\n tlf_
 			snprintf(cerca,1024, "%s WHERE COALESCE(telefon_mobil, '' ) like '\%%%s\%%' ", SELECTT, tlf_mobil);	
 		}
 	}
+//altres
 	if(strcmp(mail,"Entra el que vulguis cercar")!=0) { //últim camp
 		if( strstr(" WHERE ",cerca)==0) {
 			if(DEBUG==1)printf("\nja hi havia alguna cosa telefon3\n");
@@ -1549,12 +1377,58 @@ if(DEBUG==1)printf("\n nom=%s\n cog1=%s\n cog2=%s\n mail=%s\n tlf_casa=%s\n tlf_
 	}
 
 
-								printf("\nRESULTAT CERCA : \'%s\'\n",cerca);
+
+}
+static void
+carrega_registres(void *data, Evas_Object *obj, void *event_info)
+{
+printf("\nEstic dins de \nCARREGA_REGISTRES\n\n");
+
+//elm_hoversel_clear((Evas_Object *)data);
+const char *nom, *cog1, *cog2, *mail, *tlf_casa, *tlf_mobil, *tlf_altres, *altres, cerca[16384];
+
+ if (!data) printf("\n\nNO HI HA XIXA ?\n\n");//return;
+   elm_obj_hoversel_clear((Evas_Object *)data);
+
+
+nom = elm_object_text_get(evas_object_data_get(obj, "lb1")); //passo el camp de text, no el quadre de text
+
+	cog1 = elm_object_text_get(evas_object_data_get(obj, "lb2"));
+
+	cog2 = elm_object_text_get(evas_object_data_get(obj, "lb3"));
+
+	mail = elm_object_text_get(evas_object_data_get(obj, "lb4"));
+
+	tlf_casa = elm_object_text_get(evas_object_data_get(obj, "lb5"));//tlf 
+
+	tlf_mobil = elm_object_text_get(evas_object_data_get(obj, "lb6"));//tlf
+
+	tlf_altres = elm_object_text_get(evas_object_data_get(obj, "lb7"));//tlf
+
+	altres = elm_object_text_get(evas_object_data_get(obj, "lb8"));
+if(DEBUG==1)printf("\n nom(carrega_registres)=%s\n cog1(carrega_registres)=%s\n cog2(carrega_registres)=%s\n mail(carrega_registres)=%s\n tlf_casa(carrega_registres)=%s\n tlf_mobil(carrega_registres)=%s\n tlf_altres(carrega_registres)=%s\n altres(carrega_registres)=%s\n",nom, cog1, cog2, mail, tlf_casa, tlf_mobil, tlf_altres, altres);
+
+ if(DEBUG==1) printf("\n hauria de carregar els registres?\n");	
+	PGconn *conexion = conecta();
+	PGresult        *res;
+	int rec_count, fila, camp;
+	int nFields, nRows;
+
+	static int num = 0;
+   	char *str = malloc(sizeof(char)*250 );//* 11);
+	Elm_Object_Item *hoversel_it;
+	printf("\nSELECTT=%s\n\n",SELECTT);
+
+if(DEBUG==1)printf("\n nom=%s\n cog1=%s\n cog2=%s\n mail=%s\n tlf_casa=%s\n tlf_mobil=%s\n tlf_altres=%s\n altres=%s\n",nom, cog1, cog2, mail, tlf_casa, tlf_mobil, tlf_altres, altres);
+
+	cerca_valors(nom,cog1, cog2, mail, tlf_casa, tlf_mobil, tlf_altres, altres, cerca);
+	if(DEBUG==1)printf("\nRESULTAT CERCA : \'%s\'\n",cerca);
 	
 	res = PQexec(conexion,cerca);
 	if (PQresultStatus(res) != PGRES_TUPLES_OK)
 	{
 		printf("\nHA FALLAT LA CONEXIÓ\n");
+/*MOSTRAR FINESTRA D'ERROR'*/
 		PQerrorMessage(res);
 	        fprintf(stderr, "SELECTT failed: %s", PQerrorMessage(conexion));
 	        //exit_nicely(conn,res);
@@ -1588,41 +1462,13 @@ if(DEBUG==1)printf("\n nom=%s\n cog1=%s\n cog2=%s\n mail=%s\n tlf_casa=%s\n tlf_
 				if(DEBUG==1)printf(" valor llegit al carregar = %s en el camp %d", str,fila);
 				hoversel_it = elm_hoversel_item_add(obj, str, NULL, ELM_ICON_NONE,NULL, 
 						               str);
-				elm_object_item_del_cb_set(hoversel_it, _free);
+			//	elm_object_item_del_cb_set(hoversel_it, _free);
 			//generar camps 
 			}
 	}
 	if(DEBUG==1)printf("\nnúmero de camps = %d\n número de files %d\n",nFields, nRows);
 }
 
-static void
-_print_items(void *data, Evas_Object *obj, void *event_info)
-{
-   const Eina_List *items = elm_hoversel_items_get(obj);
-   const Eina_List *l;
-   Elm_Object_Item *hoversel_it;
-   EINA_LIST_FOREACH(items, l, hoversel_it)
-     printf("%s\n", elm_object_item_text_get(hoversel_it));
-}
-static void
-_add_item(void *data, Evas_Object *obj, void *event_info)
-{
-   static int num = 0;
-   char *str = malloc(sizeof(char) * 11);
-   Elm_Object_Item *hoversel_it;
-   if(is_eng)
-     snprintf(str, 11, "item %d", ++num);
-   else
-     snprintf(str, 11, "بند %d", ++num);
-   hoversel_it = elm_hoversel_item_add(obj, str, NULL, ELM_ICON_NONE, NULL,
-                                       str);
-   elm_object_item_del_cb_set(hoversel_it, _free);
-}
-static void
-_free(void *data, Evas_Object *obj, void *event_info)
-{
-  // free(data);
-}
 /*fi hoversel*/
 
 EAPI_MAIN int
@@ -1702,14 +1548,13 @@ Evas_Object *rect1, *hoversel, *btn = NULL;
    rect1 = evas_object_rectangle_add(evas_object_evas_get(finestra));
    evas_object_color_set(rect1, 255, 0, 0, 255);
    evas_object_show(rect1);
+
    hoversel = elm_hoversel_add(finestra);
    elm_hoversel_hover_parent_set(hoversel, finestra);
    elm_hoversel_horizontal_set(hoversel, EINA_FALSE);
    elm_object_text_set(hoversel, "Mostra Telefons");
-
-elm_grid_pack(gd, hoversel, 48, 48, 40, 40);
+   elm_grid_pack(gd, hoversel, 48, 48, 40, 40);
    evas_object_show(hoversel);
-
   printf("\n focus hoversel = %d\n",elm_object_focus_get(hoversel));// focus hoversel = 0
    elm_object_focus_set(hoversel,EINA_TRUE);
    printf("\n focus hoversel = %d\n",elm_object_focus_get(hoversel));// focus hoversel = 0
