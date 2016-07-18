@@ -33,6 +33,7 @@
 int pagina=1;
 
 static void carrega_registres_cerca(void *data, Evas_Object *obj, void *event_info);
+static void carrega_registres(void *data, Evas_Object *obj, void *event_info);
 
 static void neteja_hoversel(void *data, Evas_Object *obj, void *event_info);
 
@@ -1414,7 +1415,7 @@ void cerca_valors(char *nom, char *cog1, char *cog2,  char *mail, char *tlf_casa
 static void
 carrega_registres_cerca(void *data, Evas_Object *obj, void *event_info)
 {
-printf("\nEstic dins de \nCARREGA_REGISTRES\n\n");
+if(DEBUG==1) printf("\nEstic dins de \nCARREGA_REGISTRES_CERCA\n\n");
 
 //elm_hoversel_clear((Evas_Object *)data);
 const char *nom, *cog1, *cog2, *mail, *tlf_casa, *tlf_mobil, *tlf_altres, *altres, cerca[16384];
@@ -1491,6 +1492,89 @@ if(strlen(nom) !=19 || strlen(cog1) !=29 || strlen(cog2) !=28 || strlen(mail) !=
 			}
 		}
 	}
+elm_obj_hoversel_hover_end(obj);
+}// cerca principal
+static void
+carrega_registres(void *data, Evas_Object *obj, void *event_info)
+{
+if(DEBUG==1) printf("\nEstic dins de \nCARREGA_REGISTRES\n\n");
+
+//elm_hoversel_clear((Evas_Object *)data);
+const char cerca[16384];
+
+ if (!data) printf("\n\nNO HI HA XIXA ?\n\n");//return;
+   elm_obj_hoversel_clear((Evas_Object *)data);
+
+
+/*nom = elm_object_text_get(evas_object_data_get(obj, "lb1")); //passo el camp de text, no el quadre de text
+cog1 = elm_object_text_get(evas_object_data_get(obj, "lb2"));
+cog2 = elm_object_text_get(evas_object_data_get(obj, "lb3"));
+mail = elm_object_text_get(evas_object_data_get(obj, "lb4"));
+tlf_casa = elm_object_text_get(evas_object_data_get(obj, "lb5"));//tlf 
+tlf_mobil = elm_object_text_get(evas_object_data_get(obj, "lb6"));//tlf
+tlf_altres = elm_object_text_get(evas_object_data_get(obj, "lb7"));//tlf
+altres = elm_object_text_get(evas_object_data_get(obj, "lb8"));
+*/
+//if(DEBUG==1)printf("\n nom(carrega_registres)=%s\n cog1(carrega_registres)=%s\n cog2(carrega_registres)=%s\n mail(carrega_registres)=%s\n tlf_casa(carrega_registres)=%s\n tlf_mobil(carrega_registres)=%s\n tlf_altres(carrega_registres)=%s\n altres(carrega_registres)=%s\n",nom, cog1, cog2, mail, tlf_casa, tlf_mobil, tlf_altres, altres);
+//if(strlen(nom) !=19 || strlen(cog1) !=29 || strlen(cog2) !=28 || strlen(mail) !=22 || strlen(tlf_casa) !=30 || strlen(tlf_mobil) !=29 || strlen(tlf_altres) !=30 || strlen(altres) !=27)  {	
+	if(DEBUG==1) printf("\n hauria de carregar els registres?\n");	
+	PGconn *conexion = conecta();
+	PGresult        *res;
+	int rec_count, fila, camp;
+	int nFields, nRows;
+
+	static int num = 0;
+	char *str = malloc(sizeof(char)*250 );//* 11);
+	Elm_Object_Item *hoversel_it;
+	if(DEBUG==1)printf("\nSELECTT=%s\n\n",SELECTT);
+//if(DEBUG==1)printf("\n nom=%s\n cog1=%s\n cog2=%s\n mail=%s\n tlf_casa=%s\n tlf_mobil=%s\n tlf_altres=%s\n altres=%s\n",nom, cog1, cog2, mail, tlf_casa, tlf_mobil, tlf_altres, altres);
+//        printf("strlen(nom) =%d strlen(cog1) =%d strlen(cog2) =%d strlen(mail) =%d strlen(tlf_casa) =%d strlen(tlf_mobil) =%d strlen(tlf_altres) =%d strlen(altres) =%d ", strlen(nom), strlen(cog1), strlen(cog2), strlen(mail), strlen(tlf_casa), strlen(tlf_mobil), strlen(tlf_altres), strlen(altres)); 
+//	cerca_valors(nom,cog1, cog2, mail, tlf_casa, tlf_mobil, tlf_altres, altres, cerca);
+        snprintf(cerca,"%s",SELECTT);	
+	if(DEBUG==1)printf("\nRESULTAT CERCA : \'%s\'\n",cerca);
+	
+	res = PQexec(conexion,cerca);
+	if (PQresultStatus(res) != PGRES_TUPLES_OK){
+		printf("\nHA FALLAT LA CONEXIÓ\n");
+		/*MOSTRAR FINESTRA D'ERROR'*/
+		PQerrorMessage(res);
+	        fprintf(stderr, "SELECTT failed: %s", PQerrorMessage(conexion));
+		//exit_nicely(conn,res);
+		PQclear(res);
+		PQfinish(conexion);
+	}
+	PQerrorMessage(res);
+	desconecta(conexion);
+
+	    // first, print out the table collumn attribute names
+	nFields = PQnfields(res);
+	nRows = PQntuples(res);
+	if(DEBUG==1)printf("\nnFields = %d\n nRows = %d\n",nFields,nRows);
+
+	for (fila=0;fila<=nRows-1;fila++){
+		if(fila==0) snprintf(str, 35, "%s","#####Primer camp######");
+		else snprintf(str, 35, "%s","#####Següent camp######");
+		hoversel_it = elm_hoversel_item_add(obj, str, NULL, ELM_ICON_NONE, NULL,  str);
+		for(camp=0;camp<=nFields-1;camp++)
+				{
+				if(DEBUG==1)printf("\nfila %d camp %d\n",fila,camp);
+				if(camp==0) snprintf(str, 90, " ID : %s",PQgetvalue(res,fila,camp)); //fila,camp);		
+				else if(camp==1) snprintf(str, 90, " NOM : %s",PQgetvalue(res,fila,camp));
+				else if(camp==2) snprintf(str, 90, " 1r COGNOM : %s",PQgetvalue(res,fila,camp));
+				else if(camp==3) snprintf(str, 90, " 2N COGNOM : %s",PQgetvalue(res,fila,camp));
+				else if(camp==4) snprintf(str, 90, " CORREU : %s",PQgetvalue(res,fila,camp));
+				else if(camp==5) snprintf(str, 90, " TELEFON : %s",PQgetvalue(res,fila,camp));
+				else if(camp==6) snprintf(str, 90, " TELEFON : %s",PQgetvalue(res,fila,camp));
+				else if(camp==7) snprintf(str, 90, " TELEFON :%s",PQgetvalue(res,fila,camp));
+				else if(camp==8) snprintf(str, 90, "%s",PQgetvalue(res,fila,camp));
+				if(DEBUG==1)printf(" valor llegit al carregar = %s en el camp %d", str,fila);
+				hoversel_it = elm_hoversel_item_add(obj, str, NULL, ELM_ICON_NONE,NULL, 
+						               str);
+			//	elm_object_item_del_cb_set(hoversel_it, _free);
+			//generar camps 
+			}
+		}
+//	}
 elm_obj_hoversel_hover_end(obj);
 }// cerca principal
 
@@ -1579,7 +1663,7 @@ Evas_Object *rect1, *hoversel, *btn = NULL;
    elm_hoversel_horizontal_set(hoversel, EINA_FALSE);
    elm_object_text_set(hoversel, "Mostra Telefons");
    elm_grid_pack(gd, hoversel, 48, 48, 40, 40);
-evas_object_smart_callback_add(hoversel, "clicked",_error, finestra);   
+evas_object_smart_callback_add(hoversel, "clicked",carrega_registres, finestra);   
 evas_object_show(hoversel);
   printf("\n focus hoversel = %d\n",elm_object_focus_get(hoversel));// focus hoversel = 0
    elm_object_focus_set(hoversel,EINA_TRUE);
