@@ -1,6 +1,7 @@
 #ifdef HAVE_ELEMENTARY_X
 # include <Ecore_X.h>
 #endif
+/*http://stackoverflow.com/questions/1003360/complete-c-i18n-gettext-hello-world-example*/
 
 #include <stdio.h>
 #include <Eina.h>
@@ -305,7 +306,7 @@ Eina_Bool value;
    elm_grid_pack(gd, bg, 5, 5, 45, 45);
    evas_object_show(bg);
 
-   en_nomt = elm_entry_add(win); //nom
+/*   en_nomt = elm_entry_add(win); //nom
    elm_entry_scrollable_set(en_nomt, EINA_FALSE);
    evas_object_size_hint_weight_set(en_nomt, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
    evas_object_size_hint_align_set(en_nomt, EVAS_HINT_FILL, EVAS_HINT_FILL);
@@ -424,7 +425,7 @@ en_altres = elm_entry_add(win);
    elm_object_text_set(en_altres, "Entra el que vulguis cercar");
    evas_object_show(en_altres);
    elm_grid_pack(gd, en_altres, 15, 43, 25, 5);
-
+*/
 
 
 Evas_Object *rect1, *hoversel, *btn = NULL;
@@ -435,7 +436,7 @@ Evas_Object *rect1, *hoversel, *btn = NULL;
    elm_hoversel_hover_parent_set(hoversel, win);
    elm_hoversel_horizontal_set(hoversel, EINA_FALSE);
    elm_object_text_set(hoversel, "Esborra Registre");
-evas_object_data_set(hoversel, "lb1", en_nom); //carreguem les dades al butó ...
+/*evas_object_data_set(hoversel, "lb1", en_nom); //carreguem les dades al butó ...
    evas_object_data_set(hoversel, "lb2", en_cog1);//carreguem les dades al butó ...
    evas_object_data_set(hoversel, "lb3", en_cog2);//carreguem les dades al butó ...
    evas_object_data_set(hoversel, "lb4", en_mail);//carreguem les dades al butó ...
@@ -446,6 +447,7 @@ evas_object_data_set(hoversel, "lb1", en_nom); //carreguem les dades al butó ..
    evas_object_smart_callback_add(hoversel, "clicked", carrega_registres_cerca,en );
 // evas_object_smart_callback_add(hoversel, "clicked", cerca_bt_clicked, NULL);
 // evas_object_smart_callback_add(bt, "clicked", cerca_bt_clicked, en);
+
 /*
 https://www.enlightenment.org/program_guide/event_effect/ecore_events
 https://www.enlightenment.org/program_guide/main_loop/threads?s[]=ecore
@@ -466,7 +468,7 @@ https://docs.enlightenment.org/api/ecore/doc/html/
    bt = elm_button_add(win);
    elm_object_text_set(bt, "Esborra");
    elm_grid_pack(gd, bt, 10,70,15,5);
-   evas_object_data_set(bt, "lb1", en_nom); //carreguem les dades al butó ...
+/*   evas_object_data_set(bt, "lb1", en_nom); //carreguem les dades al butó ...
    evas_object_data_set(bt, "lb2", en_cog1);//carreguem les dades al butó ...
    evas_object_data_set(bt, "lb3", en_cog2);//carreguem les dades al butó ...
    evas_object_data_set(bt, "lb4", en_mail);//carreguem les dades al butó ...
@@ -1157,84 +1159,7 @@ evas_object_show(lb_nom);
    evas_object_show(win);
 
 }
-static void
-_hora(void *data, Evas_Object *obj, void *event_info)
-{
-	if(DEBUG)printf("\nhora?\n");
-}
 
-static void
-_slide_end_cb(void *data, Evas_Object *obj, void *event_info)
-{
-   printf("\nSlide has reach the end.\n");
-}
-
-static Eina_Bool
-_do_3d(void *data, double pos)
-{
-   Evas_Object *obj = data;
-   Evas_Map *m;
-   int x, y, w, h;
- 
-   evas_object_geometry_get(obj, &x, &y, &w, &h);
-   m = evas_map_new(4);
-   evas_map_util_points_populate_from_object(m, obj);
-   evas_map_util_3d_rotate(m, pos * 360, pos * 360, pos * 360, x + (w / 3), y + 60, 0);
-   evas_object_map_set(obj, m);
-   evas_object_map_enable_set(obj, EINA_TRUE);
-   evas_map_free(m);
- 
-   return EINA_TRUE;
-}
-
-static void
-_btn_rotate_cb(void *data, Evas_Object *btn, void *ev)
-{
-   Evas_Object *target = data;
-   ecore_animator_timeline_add(1, _do_3d, target);
-}
-
-
-static void
-_signal_cb(void *data, Evas_Object *obj, const char *emission, const char *source)
-{
-   printf("Info received from layout : %s %s\n", emission, source);
-}
-
-static Eina_Bool
-_do_animation(void *data, double pos)
-{
-   //evas_object_move(data, pos, pos);
-   // Do some more animating...
-}
-
-static Eina_Bool
-_my_animation(void *data, double pos)
-{
-   Evas_Object *obj = data;                       // Get the target object
-   int x, y, w, h;                                // Target object geometry
-   evas_object_geometry_get(obj, &x, &y, &w, &h); // Get current object position and size attributes
-   evas_object_move(obj, 500 * pos, y);           // Linear translation of the Evas object
-}
-
-static void
-_reverse_btn_clicked_cb(void *data, Evas_Object *obj, void *event_info)
-{
-   if (!data) return;
-   elm_object_mirrored_set(data, !elm_object_mirrored_get (data));
-   printf("\nMirrored mode is now %s", elm_object_mirrored_get(data) ? "ON" : "OFF" );
-   fflush(stdout);
-}
-Eina_Bool is_eng = EINA_TRUE;
-static void
-_arabic_btn_clicked_cb(void *data, Evas_Object *obj, void *event_info)
-{
-   if (!data) return;
-   is_eng = !is_eng;
-   elm_object_text_set(data, is_eng ?
-                       "Enable Arabic for new items" :
-                       "Enable English for new items");
-}
 static int entra=0;
 static void
 neteja_hoversel(void *data, Evas_Object *obj, void *event_info)
@@ -1724,7 +1649,7 @@ evas_object_show(bt_search);
 //BORRAR
 bt_drop = elm_button_add(finestra);
 elm_object_text_set(bt_drop, "Borra ");
-evas_object_smart_callback_add(bt_drop, "clicked", _error, finestra);
+evas_object_smart_callback_add(bt_drop, "clicked", _esborra/*rror*/, finestra);
 evas_object_resize(bt_drop, 120,80);
 //evas_object_move(bt_drop, (WIDTH/2)-60, (5*HEIGHT/8)-40);
  //how a container object should resize a given child within its area
